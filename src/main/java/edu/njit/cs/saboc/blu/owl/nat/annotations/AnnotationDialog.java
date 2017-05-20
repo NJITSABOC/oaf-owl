@@ -3,9 +3,6 @@ package edu.njit.cs.saboc.blu.owl.nat.annotations;
 import edu.njit.cs.saboc.blu.owl.nat.OWLBrowserDataSource;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.ErrorReportPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.ErrorReportPanelInitializer;
 import javax.swing.JDialog;
 
 /**

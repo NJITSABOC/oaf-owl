@@ -1,33 +1,17 @@
 package edu.njit.cs.saboc.blu.owl.gui.abnselection;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLTAN;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan.TANDerivationWizardPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.targetbased.TargetAbNDerivationWizardPanel;
-import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OntologyManagementPanel.OntologyManagementListener;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLNAT;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayRangeAbN;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLDiffPAreaTaxonomyWizardPanel;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLPAreaTaxonomyWizardPanel;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLTargetAbNPropertyRetriever;
-import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLTargetAbNTargetSubhierarchyRetriever;
-import edu.njit.cs.saboc.blu.owl.gui.gep.panels.tan.configuration.OWLTANConfiguration;
-import edu.njit.cs.saboc.blu.owl.gui.gep.panels.tan.configuration.OWLTANConfigurationFactory;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
-import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
-import java.util.Set;
+import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 /**
  *
@@ -43,7 +27,7 @@ public class OWLAbNCreationPanel extends JPanel {
     
     private final OWLAbNWizardPanel wizardPanel;
     
-    private JButton openNATButton;
+    private JButton openBrowserBtn;
 
     public OWLAbNCreationPanel(OWLAbNFrameManager frameManager) {
         super(new BorderLayout());
@@ -53,6 +37,7 @@ public class OWLAbNCreationPanel extends JPanel {
         ontologySelectionPanel = new OntologyManagementPanel(manager);
         
         wizardPanel = new OWLAbNWizardPanel(frameManager);
+        wizardPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
         
         ontologySelectionPanel.addOntologySelectionListener(new OntologyManagementListener() {
             
@@ -62,7 +47,7 @@ public class OWLAbNCreationPanel extends JPanel {
                 wizardPanel.setCurrentDataManager(dataManager);
                 wizardPanel.setEnabled(true);
                 
-                openNATButton.setEnabled(true);
+                openBrowserBtn.setEnabled(true);
             }
             
             @Override
@@ -71,7 +56,7 @@ public class OWLAbNCreationPanel extends JPanel {
                 wizardPanel.clear();
                 wizardPanel.setEnabled(false);
                 
-                openNATButton.setEnabled(false);
+                openBrowserBtn.setEnabled(false);
             }
             
             @Override
@@ -80,7 +65,7 @@ public class OWLAbNCreationPanel extends JPanel {
                 wizardPanel.resetView();
                 wizardPanel.setEnabled(false);
                                
-                openNATButton.setEnabled(false);
+                openBrowserBtn.setEnabled(false);
             }
             
             @Override
@@ -91,54 +76,64 @@ public class OWLAbNCreationPanel extends JPanel {
 
         this.add(ontologySelectionPanel, BorderLayout.WEST);
         
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        
+                JPanel centerPanel = new JPanel(new BorderLayout());
+                
+        JPanel browserPanel = new JPanel(new BorderLayout());
+        browserPanel.add(Box.createHorizontalStrut(10), BorderLayout.CENTER);
+        browserPanel.add(createBrowserPanel(), BorderLayout.EAST);
+                
         centerPanel.add(wizardPanel, BorderLayout.CENTER);
-        
-        centerPanel.add(createBrowserPanel(), BorderLayout.SOUTH);
+        centerPanel.add(browserPanel, BorderLayout.EAST);
 
         this.add(centerPanel, BorderLayout.CENTER);
     }
     
     private JPanel createBrowserPanel() {
-        JPanel browserPanel = new JPanel();
-        browserPanel.setLayout(new BoxLayout(browserPanel, BoxLayout.X_AXIS));
-        browserPanel.setBorder(BorderFactory.createTitledBorder("Class Browser"));
+        
+        
+        JPanel browserPanel = new JPanel(new BorderLayout());
+        browserPanel.setPreferredSize(new Dimension(200, -1));
+        
+        browserPanel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.BLUE, 2),
+                "Class Browser"));
 
-        JPanel openBtnPanel = new JPanel(new BorderLayout());
-        openBtnPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        openNATButton = new JButton("<html><div align='center'>Open<br>Class<br>Browser");
+        openBrowserBtn = new JButton("<html><div align='center'>Open<br>Class<br>Browser");
 
-        openNATButton.addActionListener( (ae) -> {
-            if(ontologySelectionPanel.getSelectedOntology().isPresent()) {
+        openBrowserBtn.addActionListener((ae) -> {
+            if (ontologySelectionPanel.getSelectedOntology().isPresent()) {
                 CreateAndDisplayOWLNAT createAndDisplay = new CreateAndDisplayOWLNAT(
-                        frameManager, 
+                        frameManager,
                         ontologySelectionPanel.getSelectedOntology().get());
-                
+
                 createAndDisplay.run();
             }
         });
         
-        openNATButton.setEnabled(false);
-        
-        openBtnPanel.add(openNATButton, BorderLayout.CENTER);
+        openBrowserBtn.setEnabled(false);
 
-        JPanel descPannel = new JPanel(new BorderLayout());
-        descPannel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+        topPanel.add(openBrowserBtn, BorderLayout.CENTER);
+        topPanel.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
         JEditorPane detailsPane = new JEditorPane();
         detailsPane.setContentType("text/html");
-        
-        String detailsString = "<html>The BLUOWL class browser allows you to browse individual classes and their relationships.";
-        
+
+        String detailsString = "<html><div align='justify'>The OAF OWL "
+                + "class browser allows you to browse individual classes and their "
+                + "restrictions. ";
+
         detailsPane.setText(detailsString);
-        
-        descPannel.add(detailsPane, BorderLayout.CENTER);
-        
-        browserPanel.add(descPannel);
-        browserPanel.add(Box.createHorizontalStrut(8));
-        browserPanel.add(openBtnPanel);
+
+        bottomPanel.add(detailsPane, BorderLayout.CENTER);
+
+        browserPanel.add(topPanel, BorderLayout.NORTH);
+        browserPanel.add(bottomPanel, BorderLayout.CENTER);
 
         return browserPanel;
     }

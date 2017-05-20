@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -129,47 +130,12 @@ public class PropertyTypeAndUsagePanel extends AbNDerivationWizardPanel {
     public void removeTypeAndUsageSelectionListener(PropertyTypeAndUsageSelectionListener listener) {
         typeAndUsageSelectionListeners.remove(listener);
     }
-    
-    public void enableOptionsByMetrics(OntologyMetrics metrics, EnableType enableType) {
         
-        Set<PropertyTypeAndUsage> availableUsages = new HashSet<>();
-
-        if (enableType == EnableType.Both || enableType == EnableType.ObjectProperties) {
-
-            if (metrics.totalOPWithDomainCount > 0) {
-                availableUsages.add(PropertyTypeAndUsage.OP_DOMAIN);
-            }
-
-            if (metrics.totalOPWithRestrictionCount > 0) {
-                availableUsages.add(PropertyTypeAndUsage.OP_RESTRICTION);
-            }
-
-            if (metrics.totalOPRestrictionEquivCount > 0) {
-                availableUsages.add(PropertyTypeAndUsage.OP_EQUIV);
-            }
-        }
-
-        if (enableType == EnableType.Both || enableType == EnableType.DataProperties) {
-
-            if (metrics.totalDPWithDomainCount > 0) {
-                availableUsages.add(PropertyTypeAndUsage.DP_DOMAIN);//originally ExplicitDDomain
-            }
-
-            if (metrics.totalDPWithRestrictionCount > 0) {
-                availableUsages.add(PropertyTypeAndUsage.DP_RESTRICTION);//originally Restriction
-            }
-
-            if (metrics.totalDPRestrictionEquivCount > 0) {
-                availableUsages.add(PropertyTypeAndUsage.DP_EQUIV); //originally RestrictionEquivalence
-            }
-        }
-        
-        enableOptions(availableUsages);
-    }
-    
-    public void enableOptions(Set<PropertyTypeAndUsage> typesAndUsages) {
+    public void initialize(Set<PropertyTypeAndUsage> typesAndUsages) {
         
         this.availableTypesAndUsages = Optional.of(typesAndUsages);
+        
+        enableOptions(typesAndUsages);
         
         Set<PropertyTypeAndUsage> opTypes = typesAndUsages.stream().filter( (typeAndUsage) -> {
            return typeAndUsage.getType().equals(PropertyType.Object);
@@ -179,33 +145,50 @@ public class PropertyTypeAndUsagePanel extends AbNDerivationWizardPanel {
            return typeAndUsage.getType().equals(PropertyType.Data);
         }).collect(Collectors.toSet());
         
+        
         if(opTypes.isEmpty()) {
-            chkUseOp.setEnabled(false);
             chkUseOp.setSelected(false);
-            
             opTypePanel.clear();
-            opTypePanel.setEnabled(false);
         } else {
-            chkUseOp.setEnabled(true);
             chkUseOp.setSelected(true);
-            
             opTypePanel.enableOptions(opTypes);
         }
         
         if(dpTypes.isEmpty()) {
-            chkUseDp.setEnabled(false);
             chkUseDp.setSelected(false);
-            
             dpTypePanel.clear();
-            dpTypePanel.setEnabled(false);
         } else {
-            chkUseDp.setEnabled(true);
             chkUseDp.setSelected(true);
-            
             dpTypePanel.enableOptions(dpTypes);
         }
     }
     
+    public void enableOptions(Set<PropertyTypeAndUsage> typesAndUsages) {
+        Set<PropertyTypeAndUsage> opTypes = typesAndUsages.stream().filter((typeAndUsage) -> {
+            return typeAndUsage.getType().equals(PropertyType.Object);
+        }).collect(Collectors.toSet());
+
+        Set<PropertyTypeAndUsage> dpTypes = typesAndUsages.stream().filter((typeAndUsage) -> {
+            return typeAndUsage.getType().equals(PropertyType.Data);
+        }).collect(Collectors.toSet());
+
+        if (opTypes.isEmpty()) {
+            chkUseOp.setEnabled(false);
+            opTypePanel.setEnabled(false);
+        } else {
+            chkUseOp.setEnabled(true);
+            opTypePanel.enableOptions(opTypes);
+        }
+
+        if (dpTypes.isEmpty()) {
+            chkUseDp.setEnabled(false);
+            dpTypePanel.setEnabled(false);
+        } else {
+            chkUseDp.setEnabled(true);
+            dpTypePanel.enableOptions(dpTypes);
+        }
+    }
+
     public boolean typeSelected() {
         if(chkUseOp.isSelected()) {
             return !opTypePanel.getSelectedUsageTypes().isEmpty();
@@ -243,16 +226,18 @@ public class PropertyTypeAndUsagePanel extends AbNDerivationWizardPanel {
         this.optDataManager = Optional.of(dataManager);
     }
     
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
-        
-        opTypePanel.setEnabled(value);
-        dpTypePanel.setEnabled(value);
-        
-        this.chkUseOp.setEnabled(value);
-        this.chkUseDp.setEnabled(value);
+
+        if (value && this.availableTypesAndUsages.isPresent()) {
+            enableOptions(availableTypesAndUsages.get());
+        } else {
+            enableOptions(Collections.emptySet());
+        }
     }
     
+    @Override
     public void clearContents() {
         super.clearContents();
         
@@ -266,20 +251,8 @@ public class PropertyTypeAndUsagePanel extends AbNDerivationWizardPanel {
         this.chkUseOp.setSelected(false);
     }
     
+    @Override
     public void resetView() {
         
-        if(availableTypesAndUsages.isPresent()) {
-            enableOptions(availableTypesAndUsages.get());
-        }
-    }
-    
-    public void setFontSize(int fontSize) {
-        Font font = chkUseDp.getFont().deriveFont(Font.BOLD, fontSize);
-        
-        chkUseDp.setFont(font);
-        chkUseOp.setFont(font);
-        
-        opTypePanel.setFontSize(fontSize);
-        dpTypePanel.setFontSize(fontSize);
     }
 }

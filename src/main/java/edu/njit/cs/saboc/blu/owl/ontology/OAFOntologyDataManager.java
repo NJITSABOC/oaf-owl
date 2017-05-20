@@ -690,8 +690,12 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
             OWLDataFactory dataFactory = OWLManager.getOWLDataFactory();
 
             Collection<OWLAnnotation> annotations = BLUEntityRetriever.getAnnotations(dataFactory.getRDFSLabel(), this.getSourceOntology());
+            
+            Set<OWLAnnotation> labelAnnotations = annotations.stream().filter( (annotation) -> {
+                return annotation.getProperty().isLabel();  
+            }).collect(Collectors.toSet());
 
-            for (OWLAnnotation annotation : annotations) {
+            for (OWLAnnotation annotation : labelAnnotations) {
                 
                 if (annotation.getValue() instanceof OWLLiteral) {
                     OWLLiteral val = (OWLLiteral) annotation.getValue();
@@ -754,8 +758,12 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         OWLClass cls = concept.getCls();
 
         Collection<OWLAnnotation> annotations = BLUEntityRetriever.getAnnotations(cls, this.getSourceOntology());
+        
+        Set<OWLAnnotation> labelAnnotations = annotations.stream().filter((annotation) -> {
+            return annotation.getProperty().isLabel();
+        }).collect(Collectors.toSet());
 
-        for (OWLAnnotation annotation : annotations) {
+        for (OWLAnnotation annotation : labelAnnotations) {
             if (annotation.getValue() instanceof OWLLiteral) {
                 OWLLiteral val = (OWLLiteral) annotation.getValue();
 
@@ -774,8 +782,12 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         OWLClass cls = concept.getCls();
 
         Collection<OWLAnnotation> annotations = BLUEntityRetriever.getAnnotations(cls, this.getSourceOntology());
+        
+        Set<OWLAnnotation> labelAnnotations = annotations.stream().filter((annotation) -> {
+            return annotation.getProperty().isLabel();
+        }).collect(Collectors.toSet());
 
-        for (OWLAnnotation annotation : annotations) {
+        for (OWLAnnotation annotation : labelAnnotations) {
             if (annotation.getValue() instanceof OWLLiteral) {
                 OWLLiteral val = (OWLLiteral) annotation.getValue();
 
@@ -794,8 +806,12 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         OWLClass cls = concept.getCls();
 
         Collection<OWLAnnotation> annotations = BLUEntityRetriever.getAnnotations(cls, this.getSourceOntology());
+        
+        Set<OWLAnnotation> labelAnnotations = annotations.stream().filter((annotation) -> {
+            return annotation.getProperty().isLabel();
+        }).collect(Collectors.toSet());
 
-        for (OWLAnnotation annotation : annotations) {
+        for (OWLAnnotation annotation : labelAnnotations) {
             OWLLiteral val = (OWLLiteral) annotation.getValue();
 
             String literal = val.getLiteral().replaceAll("_", " ");

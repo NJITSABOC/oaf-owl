@@ -351,7 +351,7 @@ public class OWLBrowserDataSource extends ConceptBrowserDataSource<OWLConcept> {
             return parent.getClassExpressionType() != ClassExpressionType.OWL_CLASS;
         }).collect(Collectors.toSet());
         
-        restrictions.addAll(BLUEntityRetriever.getEquivalentClasses(concept.getCls(), dataManager.getSourceOntology()));
+        restrictions.addAll(BLUEntityRetriever.getNonClassEquivalences(concept.getCls(), dataManager.getSourceOntology()));
 
         ArrayList<RestrictionResult> restrictionResults = new ArrayList<>();
 

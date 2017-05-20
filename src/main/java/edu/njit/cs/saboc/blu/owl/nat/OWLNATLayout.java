@@ -4,8 +4,6 @@ import edu.njit.cs.saboc.blu.owl.nat.properties.RestrictionPanel;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.layout.BasicNATAdjustableLayout;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *

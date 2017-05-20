@@ -207,7 +207,8 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
                 });
 
                 SwingUtilities.invokeLater( () -> {
-                    propertyTypeAndUsagePanel.enableOptions(typesAndUsages);
+                    
+                    propertyTypeAndUsagePanel.initialize(typesAndUsages);
                     
                     propertySelectionPanel.initialize(sortedProperties);
 
@@ -223,7 +224,10 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
         loaderThread.start();
     }
     
-    private void doPropertyTypesChangedAction(OWLConcept root, Set<PropertyTypeAndUsage> typesAndUsages) {
+    private void doPropertyTypesChangedAction(
+            OWLConcept root, 
+            Set<PropertyTypeAndUsage> typesAndUsages) {
+        
         propertySelectionPanel.resetView();
         
         propertySelectionPanel.setEnabled(false);

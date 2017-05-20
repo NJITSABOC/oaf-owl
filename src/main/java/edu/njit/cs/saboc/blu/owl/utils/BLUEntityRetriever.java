@@ -2,6 +2,9 @@
 package edu.njit.cs.saboc.blu.owl.utils;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.semanticweb.owlapi.model.ClassExpressionType;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -22,7 +25,7 @@ import org.semanticweb.owlapi.search.EntitySearcher;
  */
 public class BLUEntityRetriever {
     
-    public static Collection<OWLAnnotation> getAnnotations(OWLEntity entity, OWLOntology ontology) {
+    public static Collection<OWLAnnotation> getAnnotations(OWLEntity entity, OWLOntology ontology) {        
         return EntitySearcher.getAnnotations(entity, ontology);
     }
     
@@ -44,6 +47,15 @@ public class BLUEntityRetriever {
     
     public static Collection<OWLClassExpression> getEquivalentClasses(OWLClass cls, OWLOntology ontology) {
         return EntitySearcher.getEquivalentClasses(cls, ontology);
+    }
+    
+    public static Set<OWLClassExpression> getNonClassEquivalences(OWLClass cls, OWLOntology ontology) {
+        
+        Collection<OWLClassExpression> allEquivs = BLUEntityRetriever.getEquivalentClasses(cls, ontology);
+        
+        return allEquivs.stream().filter( (equiv) -> {
+            return equiv.getClassExpressionType() != ClassExpressionType.OWL_CLASS;
+        }).collect(Collectors.toSet());
     }
     
     public static Collection<OWLClassExpression> getDomains(OWLProperty property, OWLOntology ontology) {       

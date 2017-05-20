@@ -22,9 +22,9 @@ public class PropertyUsageSelectionPanel extends JPanel {
         public void propertyUsageChanged(PropertyTypeAndUsage usage, boolean included);
     }
     
-    private final JCheckBox chkUseDomains = new JCheckBox("Use Explicit Domains");
-    private final JCheckBox chkUseRestrictions = new JCheckBox("Use Restrictions");
-    private final JCheckBox chkUseRestrictionsInEquiv = new JCheckBox("Use Equiv. Restrictions");
+    private final JCheckBox chkUseDomains = new JCheckBox("Domains");
+    private final JCheckBox chkUseRestrictions = new JCheckBox("Class Restrictions");
+    private final JCheckBox chkUseRestrictionsInEquiv = new JCheckBox("Equivalence Restrictions");
     
     private final ArrayList<PropertUsagedChangedListener> listeners = new ArrayList<>();
     
@@ -86,26 +86,20 @@ public class PropertyUsageSelectionPanel extends JPanel {
         this.listeners.remove(listener);
     }
     
+    @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         
         chkUseDomains.setEnabled(enabled);
         chkUseRestrictions.setEnabled(enabled);
         chkUseRestrictionsInEquiv.setEnabled(enabled);
-        
-        chkUseDomains.setSelected(enabled);
-        chkUseRestrictions.setSelected(enabled);
-        chkUseRestrictionsInEquiv.setSelected(enabled);
     }
     
     public void enableOptions(Set<PropertyTypeAndUsage> availableOptions) {
+        
         chkUseDomains.setSelected(false);
         chkUseRestrictions.setSelected(false);
         chkUseRestrictionsInEquiv.setSelected(false);
-
-        chkUseDomains.setEnabled(false);
-        chkUseRestrictions.setEnabled(false);
-        chkUseRestrictionsInEquiv.setEnabled(false);
 
         if (propertyType.equals(PropertyType.Object)) {
             if (availableOptions.contains(PropertyTypeAndUsage.OP_DOMAIN)) {
@@ -189,15 +183,15 @@ public class PropertyUsageSelectionPanel extends JPanel {
             }
         } else {
             if(chkUseDomains.isSelected()) {
-                result.add(PropertyTypeAndUsage.DP_DOMAIN);//explicitdomain
+                result.add(PropertyTypeAndUsage.DP_DOMAIN);
             }
 
             if(chkUseRestrictions.isSelected()) {
-                result.add(PropertyTypeAndUsage.DP_RESTRICTION);//restriction
+                result.add(PropertyTypeAndUsage.DP_RESTRICTION);
             }
 
             if(chkUseRestrictionsInEquiv.isSelected()) {
-                result.add(PropertyTypeAndUsage.DP_EQUIV);//restriction equivalence
+                result.add(PropertyTypeAndUsage.DP_EQUIV);
             }
         }
         
