@@ -36,7 +36,7 @@ public class OWLAbNCreationPanel extends JPanel {
         
         ontologySelectionPanel = new OntologyManagementPanel(manager);
         
-        wizardPanel = new OWLAbNWizardPanel(frameManager);
+        wizardPanel = new OWLAbNWizardPanel(frameManager, true);
         wizardPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
         
         ontologySelectionPanel.addOntologySelectionListener(new OntologyManagementListener() {

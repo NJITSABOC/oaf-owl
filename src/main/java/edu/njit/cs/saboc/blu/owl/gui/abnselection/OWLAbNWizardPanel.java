@@ -45,7 +45,7 @@ public class OWLAbNWizardPanel extends JPanel {
     
     private final OWLAbNFrameManager frameManager;
     
-    public OWLAbNWizardPanel(OWLAbNFrameManager frameManager) {
+    public OWLAbNWizardPanel(OWLAbNFrameManager frameManager, boolean includeDiff) {
         
         this.frameManager = frameManager;
         
@@ -128,11 +128,14 @@ public class OWLAbNWizardPanel extends JPanel {
         targetPanel.add(targetAbNDerivationWizardPanel, BorderLayout.CENTER);
         
         abnSelectionTabs.addTab("<html>Partial-area Taxonomy", pareaPanel);
-        abnSelectionTabs.addTab("<html>Diff Partial-area Taxonomy (<font color = 'RED'><i>Under development</i></font>)", diffPAreaTaxonomyWizardPanel);
+        
+        if(includeDiff) {
+            abnSelectionTabs.addTab("<html>Diff Partial-area Taxonomy (<font color = 'RED'><i>Under development</i></font>)", diffPAreaTaxonomyWizardPanel);
+        }
+        
         abnSelectionTabs.addTab("<html>Tribal Abstraction Network (TAN)", tanPanel);
         abnSelectionTabs.addTab("<html>Range Abstraction Network", targetPanel);
 
-        
         this.setLayout(new BorderLayout());
         
         this.add(abnSelectionTabs, BorderLayout.CENTER);

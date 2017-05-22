@@ -62,7 +62,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
             MultiAbNGraphFrame graphFrame,
             OAFOntologyDataManager dataManager) {
         
-        OWLAbNWizardPanel wizardPanel = new OWLAbNWizardPanel(new OWLFrameManagerAdapter(graphFrame));
+        OWLAbNWizardPanel wizardPanel = new OWLAbNWizardPanel(new OWLFrameManagerAdapter(graphFrame), false);
         wizardPanel.setCurrentDataManager(dataManager);
         wizardPanel.setEnabled(true);
         
