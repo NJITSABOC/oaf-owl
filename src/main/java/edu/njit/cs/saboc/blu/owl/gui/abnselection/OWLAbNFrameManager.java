@@ -10,6 +10,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.tan.DisjointCluster;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.DisjointAbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.FrameCreationAction;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
@@ -29,9 +31,13 @@ import javax.swing.JFrame;
  * @author Chris
  */
 public class OWLAbNFrameManager extends AbNDisplayManager {
+    
     private final JFrame mainFrame;
+    
+    private final AbNWarningManager warningManager = new DisjointAbNWarningManager();
 
-    public OWLAbNFrameManager(JFrame mainFrame, FrameCreationAction fca) {
+    public OWLAbNFrameManager(JFrame mainFrame, 
+            FrameCreationAction fca) {
         super(fca);
 
         this.mainFrame = mainFrame;
@@ -43,7 +49,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) taxonomy;
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this),
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager),
                 owlParser);
 
         graphFrame.displayPAreaTaxonomy(taxonomy);
@@ -58,7 +64,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
                 mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this), 
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
                 owlParser);
 
         graphFrame.displayTAN(tan);
@@ -73,7 +79,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
                 mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this), 
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
                 owlParser);
 
         graphFrame.displayDisjointPAreaTaxonomy(
@@ -90,7 +96,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
                 mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this), 
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
                 owlParser);
         
         graphFrame.displayDisjointTAN(
@@ -117,7 +123,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
                 mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this), 
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
                 owlParser);
 
         graphFrame.displayTargetAbstractionNetwork(targetAbN);
@@ -132,7 +138,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
                 mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this), 
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
                 owlParser);
 
         graphFrame.displayAreaTaxonomy(taxonomy);
@@ -147,7 +153,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
         MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
                 mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this), 
+                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
                 owlParser);
 
         graphFrame.displayBandTAN(tan);

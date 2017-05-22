@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 public class OWLAbNSelectionPanel extends JPanel {
     
     public OWLAbNSelectionPanel(OWLAbNFrameManager displayFrameListener) {
+        
         super(new BorderLayout());
 
         this.add(new OWLAbNCreationPanel(displayFrameListener), BorderLayout.CENTER);

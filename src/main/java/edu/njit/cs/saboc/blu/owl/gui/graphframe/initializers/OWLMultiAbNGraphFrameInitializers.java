@@ -4,13 +4,14 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
-import edu.njit.cs.saboc.blu.core.gui.gep.DisjointAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.DisjointAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.DerivationSelectionButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.AbNGraphFrameInitializers;
@@ -45,12 +46,16 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     
     private final OWLAbNFrameManager frameManager;
     
+    private final AbNWarningManager warningManager;
+    
     public OWLMultiAbNGraphFrameInitializers(
             OAFOntologyDataManager ontologyManager, 
-            OWLAbNFrameManager frameManager) {
+            OWLAbNFrameManager frameManager,
+            AbNWarningManager warningManager) {
         
         this.ontologyManager = ontologyManager;
         this.frameManager = frameManager;
+        this.warningManager = warningManager;
     }
     
      private DerivationSelectionButton createDerivationSelectionButton(
@@ -68,7 +73,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     @Override
     public GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> getPAreaTaxonomyInitializer() {
         
-        return new PAreaTaxonomyInitializer() {
+        return new PAreaTaxonomyInitializer(warningManager) {
 
             @Override
             public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, PAreaTaxonomyConfiguration config) {
@@ -91,7 +96,8 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
 
     @Override
     public GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> getAreaTaxonomyInitializer() {
-        return new AreaTaxonomyInitializer() {
+        
+        return new AreaTaxonomyInitializer(warningManager) {
             
             @Override
             public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, PAreaTaxonomyConfiguration config) {
@@ -116,7 +122,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     @Override
     public GraphFrameInitializer<ClusterTribalAbstractionNetwork, TANConfiguration> getTANInitializer() {
         
-        return new TANInitializer() {
+        return new TANInitializer(warningManager) {
             
             @Override
             public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, TANConfiguration config) {
@@ -140,7 +146,8 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     
     @Override
     public GraphFrameInitializer<ClusterTribalAbstractionNetwork, TANConfiguration> getBandTANInitializer() {
-        return new BandTANInitializer() {
+        
+        return new BandTANInitializer(warningManager) {
             
             @Override
             public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, TANConfiguration config) {
@@ -163,7 +170,8 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     
     @Override
     public GraphFrameInitializer<TargetAbstractionNetwork, TargetAbNConfiguration> getTargetAbNInitializer() {
-        return new TargetAbNInitializer() {
+        
+        return new TargetAbNInitializer(warningManager) {
 
             @Override
             public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, TargetAbNConfiguration config) {
@@ -222,7 +230,8 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
                         (bound) -> {
                             DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork().getAggregated(bound);
                             config.getUIConfiguration().getAbNDisplayManager().displayDisjointPAreaTaxonomy(disjointAbN);
-                        });
+                        },
+                        warningManager);
             }
         };
     }
@@ -263,7 +272,8 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
                         (bound) -> {
                             DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork().getAggregated(bound);
                             config.getUIConfiguration().getAbNDisplayManager().displayDisjointTribalAbstractionNetwork(disjointAbN);
-                        });
+                        },
+                        warningManager);
             }
         };
     }
