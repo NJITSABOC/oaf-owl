@@ -11,6 +11,8 @@ import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLDiffPAreaTaxonomyWiz
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLPAreaTaxonomyWizardPanel;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLTargetAbNPropertyRetriever;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLTargetAbNTargetSubhierarchyRetriever;
+import edu.njit.cs.saboc.blu.owl.gui.gep.panels.range.configuration.OWLRangeAbNConfiguration;
+import edu.njit.cs.saboc.blu.owl.gui.gep.panels.range.configuration.OWLRangeAbNConfigurationFactory;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.tan.configuration.OWLTANConfiguration;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.tan.configuration.OWLTANConfigurationFactory;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
@@ -66,14 +68,14 @@ public class OWLAbNWizardPanel extends JPanel {
         
         diffPAreaTaxonomyWizardPanel = new OWLDiffPAreaTaxonomyWizardPanel(frameManager);
         
-        OWLTANConfigurationFactory factory = new OWLTANConfigurationFactory();
+        OWLTANConfigurationFactory tanConfigFactory = new OWLTANConfigurationFactory();
         
-        OWLTANConfiguration dummyConfig = factory.createConfiguration(null,
+        OWLTANConfiguration dummyTANConfig = tanConfigFactory.createConfiguration(null,
                 frameManager, 
                 null, 
                 false);        
 
-        tanDerivationWizardPanel = new TANDerivationWizardPanel(dummyConfig, (patriarchs) -> {
+        tanDerivationWizardPanel = new TANDerivationWizardPanel(dummyTANConfig, (patriarchs) -> {
             CreateAndDisplayOWLTAN creatingTANDialog = new CreateAndDisplayOWLTAN(
                     "Creating Tribal Abstraction Network", 
                     (Set<OWLConcept>)(Set<?>)patriarchs,
@@ -84,7 +86,13 @@ public class OWLAbNWizardPanel extends JPanel {
             creatingTANDialog.run();
         });
         
-        targetAbNDerivationWizardPanel = new TargetAbNDerivationWizardPanel(dummyConfig,
+        OWLRangeAbNConfigurationFactory rangeConfigFactory = new OWLRangeAbNConfigurationFactory();
+        
+        OWLRangeAbNConfiguration dummyRangeConfig = rangeConfigFactory.createConfiguration(null,
+                frameManager, 
+                null);        
+        
+        targetAbNDerivationWizardPanel = new TargetAbNDerivationWizardPanel(dummyRangeConfig,
                 (sourceHierarchy, type, targetHierarchy) -> {
                     CreateAndDisplayRangeAbN createRangeAbN = new CreateAndDisplayRangeAbN(
                        "Creating Range Abstraction Network",

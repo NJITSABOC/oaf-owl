@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons.PAreaTaxonomyHelpButton;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.InheritablePropertySelectionPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -56,6 +58,8 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
     private final InheritablePropertySelectionPanel propertySelectionPanel;
     
     private final JButton deriveBtn;
+    
+    private final PAreaTaxonomyHelpButton pareaHelpBtn;
     
     private final JLabel statusLabel;
     
@@ -143,12 +147,16 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
         
         JPanel derivationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         
-        this.deriveBtn = new JButton("Derive Partial-area Taxonomy");
+        this.deriveBtn = new JButton("<html><div align ='center'>Derive Partial-area<br>Taxonomy");
         this.deriveBtn.addActionListener( (ae) -> {
             performedDerivationAction();
         });
         
+        this.pareaHelpBtn = new PAreaTaxonomyHelpButton(config);
+        
         derivationPanel.add(deriveBtn);
+        derivationPanel.add(Box.createHorizontalStrut(10));
+        derivationPanel.add(pareaHelpBtn);
         
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.add(statusPanel, BorderLayout.CENTER);
