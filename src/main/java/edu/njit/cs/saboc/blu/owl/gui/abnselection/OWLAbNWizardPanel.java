@@ -127,10 +127,10 @@ public class OWLAbNWizardPanel extends JPanel {
         JPanel targetPanel = new JPanel(new BorderLayout());
         targetPanel.add(targetAbNDerivationWizardPanel, BorderLayout.CENTER);
         
-        abnSelectionTabs.addTab("Partial-area Taxonomy", pareaPanel);
-        abnSelectionTabs.addTab("Diff Partial-area Taxonomy", diffPAreaTaxonomyWizardPanel);
-        abnSelectionTabs.addTab("Tribal Abstraction Network", tanPanel);
-        abnSelectionTabs.addTab("Range Abstraction Network", targetPanel);
+        abnSelectionTabs.addTab("<html>Partial-area Taxonomy", pareaPanel);
+        abnSelectionTabs.addTab("<html>Diff Partial-area Taxonomy (<font color = 'RED'><i>Under development</i></font>)", diffPAreaTaxonomyWizardPanel);
+        abnSelectionTabs.addTab("<html>Tribal Abstraction Network (TAN)", tanPanel);
+        abnSelectionTabs.addTab("<html>Range Abstraction Network", targetPanel);
 
         
         this.setLayout(new BorderLayout());
