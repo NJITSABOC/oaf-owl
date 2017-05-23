@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.NodeHelpButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.PopoutDetailsButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.buttons.CreateAncestorTargetAbNButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.buttons.CreateDescendantTargetAbNButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.buttons.ExpandAggregateTargetGroupButton;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.buttons.OWLOpenBrowserButton;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.range.configuration.OWLRangeAbNConfiguration;
@@ -24,6 +26,23 @@ public class OWLTargetGroupOptionsPanel extends NodeOptionsPanel<TargetGroup> {
                 config.getUIConfiguration().getFrameManager());
 
         super.addOptionButton(openBrowserButton);
+        
+        CreateAncestorTargetAbNButton createAncestorBtn = new CreateAncestorTargetAbNButton(config, (targetAbN) -> {
+            TargetAbstractionNetwork abn = (TargetAbstractionNetwork) targetAbN;
+
+            config.getUIConfiguration().getAbNDisplayManager().displayTargetAbstractionNetwork(abn);
+        });
+        
+        super.addOptionButton(createAncestorBtn);
+        
+        CreateDescendantTargetAbNButton createDescendantBtn = new CreateDescendantTargetAbNButton(config, (targetAbN) -> {
+            TargetAbstractionNetwork abn = (TargetAbstractionNetwork) targetAbN;
+
+            config.getUIConfiguration().getAbNDisplayManager().displayTargetAbstractionNetwork(abn);
+        });
+        
+        super.addOptionButton(createDescendantBtn);
+        
 
         if (config.getTargetAbstractionNetwork().isAggregated()) {
             ExpandAggregateTargetGroupButton expandAggregateButton = new ExpandAggregateTargetGroupButton(config, (targetAbN) -> {

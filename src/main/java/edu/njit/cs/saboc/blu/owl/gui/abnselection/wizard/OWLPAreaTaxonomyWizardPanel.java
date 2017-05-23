@@ -179,6 +179,7 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
         this.propertySelectionPanel.setEnabled(value);
         
         this.deriveBtn.setEnabled(value);
+        this.pareaHelpBtn.setEnabled(value);
     }
     
     @Override

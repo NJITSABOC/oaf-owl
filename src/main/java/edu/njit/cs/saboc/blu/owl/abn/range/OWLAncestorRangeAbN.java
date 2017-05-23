@@ -9,13 +9,16 @@ import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 
 /**
  *
- * @author Chris O
+ * @author Chris Ochs
  */
-public class OWLRangeAbstractionNetwork extends TargetAbstractionNetwork<TargetGroup> implements OWLAbstractionNetwork {
+public class OWLAncestorRangeAbN extends AncestorTargetAbN<TargetGroup> implements OWLAbstractionNetwork {
     
     private final OAFOntologyDataManager dataManager;
     
-    public OWLRangeAbstractionNetwork(TargetAbstractionNetwork source, OAFOntologyDataManager dataManager) {
+    public OWLAncestorRangeAbN(
+            AncestorTargetAbN source, 
+            OAFOntologyDataManager dataManager) {
+        
         super(source);
         
         this.dataManager = dataManager;
@@ -30,7 +33,7 @@ public class OWLRangeAbstractionNetwork extends TargetAbstractionNetwork<TargetG
     public OAFOntologyDataManager getDataManager() {
         return dataManager;
     }
-
+    
     @Override
     public TargetAbstractionNetwork createDescendantTargetAbN(TargetGroup root) {
         return new OWLDescendantRangeAbN((DescendantTargetAbN)super.createDescendantTargetAbN(root), dataManager);
@@ -40,4 +43,6 @@ public class OWLRangeAbstractionNetwork extends TargetAbstractionNetwork<TargetG
     public TargetAbstractionNetwork createAncestorTargetAbN(TargetGroup root) {
         return new OWLAncestorRangeAbN((AncestorTargetAbN)super.createAncestorTargetAbN(root), dataManager);
     }
+    
+    
 }

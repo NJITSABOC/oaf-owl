@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.gui.gep.panels.range.configuration;
 
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNTextConfiguration;
 import edu.njit.cs.saboc.blu.owl.utils.OWLEntityNameConfiguration;
 
@@ -16,7 +15,12 @@ public class OWLRangeAbNTextConfiguration extends TargetAbNTextConfiguration {
     }
 
     @Override
-    public String getNodeHelpDescription(TargetGroup group) {
-        return "*** OWL RANGE ABN TARGET GROUP DESCRIPTION ***";
+    public String getAbNTypeName(boolean plural) {
+        if(plural) {
+            return "Range Abstraction Networks";
+        } else {
+            return "Range Abstraction Network";
+        }
     }
+    
 }
