@@ -74,7 +74,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
             JMenuItem reportMissingRel = new JMenuItem("Report missing restriction");
             reportMissingRel.setFont(reportMissingRel.getFont().deriveFont(14.0f));
             reportMissingRel.addActionListener((ae) -> {
-                ErrorReportDialog.displayMissingSemanticRelationshipDialog(mainPanel);
+                ErrorReportDialog.displayMissingSemanticRelationshipDialog(mainPanel, focusConcept);
             });
 
             components.add(reportMissingRel);
@@ -140,6 +140,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         removeRelBtn.addActionListener((ae) -> {
             ErrorReportDialog.displayErroneousSemanticRelationshipDialog(
                     mainPanel,
+                    focusConcept,
                     propertyType,
                     target);
         });
@@ -149,6 +150,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         changeTargetBtn.addActionListener((ae) -> {
             ErrorReportDialog.displayReplaceTargetDialog(
                     mainPanel,
+                    focusConcept,
                     propertyType,
                     target);
         });
@@ -158,6 +160,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         replaceRelBtn.addActionListener((ae) -> {
             ErrorReportDialog.displayReplaceSemanticRelationshipDialog(
                     mainPanel,
+                    focusConcept,
                     propertyType,
                     target);
         });
@@ -167,6 +170,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         otherErrorBtn.addActionListener((ae) -> {
             ErrorReportDialog.displayOtherSemanticRelationshipErrorDialog(
                     mainPanel,
+                    focusConcept,
                     propertyType,
                     target);
         });
@@ -181,7 +185,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         JMenuItem reportMissingRel = new JMenuItem("Report missing attribute relationship");
         reportMissingRel.setFont(reportMissingRel.getFont().deriveFont(14.0f));
         reportMissingRel.addActionListener((ae) -> {
-            ErrorReportDialog.displayMissingSemanticRelationshipDialog(mainPanel);
+            ErrorReportDialog.displayMissingSemanticRelationshipDialog(mainPanel, focusConcept);
         });
 
         components.add(reportMissingRel);
@@ -251,13 +255,15 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         JMenuItem removeRelBtn = new JMenuItem("Remove erroneous restriction");
         removeRelBtn.setFont(removeRelBtn.getFont().deriveFont(14.0f));
         removeRelBtn.addActionListener((ae) -> {
-            OWLErrorReportDialog.displayRemoveOtherRestrictionDialog(mainPanel, restrictionExpression);
+            OWLErrorReportDialog.displayRemoveOtherRestrictionDialog(
+                    mainPanel, focusConcept, restrictionExpression);
         });
 
         JMenuItem otherErrorBtn = new JMenuItem("Other error with restriction");
         otherErrorBtn.setFont(otherErrorBtn.getFont().deriveFont(14.0f));
         otherErrorBtn.addActionListener((ae) -> {
-            OWLErrorReportDialog.displayOtherErrorWithOtherRestrictionDialog(mainPanel, restrictionExpression);
+            OWLErrorReportDialog.displayOtherErrorWithOtherRestrictionDialog(
+                    mainPanel, focusConcept, restrictionExpression);
         });
 
         components.add(removeRelBtn);
@@ -268,7 +274,7 @@ public class RestrictionRightClickMenu extends AuditReportRightClickMenu<OWLConc
         JMenuItem reportMissingRel = new JMenuItem("Report missing attribute relationship");
         reportMissingRel.setFont(reportMissingRel.getFont().deriveFont(14.0f));
         reportMissingRel.addActionListener((ae) -> {
-            ErrorReportDialog.displayMissingSemanticRelationshipDialog(mainPanel);
+            ErrorReportDialog.displayMissingSemanticRelationshipDialog(mainPanel, focusConcept);
         });
 
         components.add(reportMissingRel);

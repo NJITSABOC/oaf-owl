@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.gui.gep.panels.pareataxonomy.reports;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.ConceptLocationDataFactory;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOWLOntology;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ public class OWLClassLocationDataFactory implements ConceptLocationDataFactory<O
 
     @Override
     public Set<OWLConcept> getConceptsFromIds(ArrayList<String> ids) {
-        System.out.println("ids: "+ ids.toString());
 
         Map<String, OWLConcept> conceptMap = new HashMap<>();
         

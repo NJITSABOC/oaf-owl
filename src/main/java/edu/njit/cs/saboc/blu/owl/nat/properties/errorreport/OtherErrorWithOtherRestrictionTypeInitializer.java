@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.owl.nat.properties.errorreport;
 import edu.njit.cs.saboc.blu.owl.nat.AxiomStringGenerator;
 import edu.njit.cs.saboc.blu.owl.nat.error.OtherErrorWithOtherRestrictionType;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOWLOntology;
+import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.ErrorReportPanelInitializer;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -11,21 +12,28 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
  *
  * @author Chris O
  */
-public class OtherErrorWithOtherRestrictionTypeInitializer implements ErrorReportPanelInitializer<OtherErrorWithOtherRestrictionType> {
+public class OtherErrorWithOtherRestrictionTypeInitializer extends 
+        ErrorReportPanelInitializer<OWLConcept, OtherErrorWithOtherRestrictionType> {
     
-    private final OAFOWLOntology theOntology;
     private final OWLClassExpression erroneousRestriction;
 
-    public OtherErrorWithOtherRestrictionTypeInitializer(OAFOWLOntology ontology, OWLClassExpression erroneousRestriction) {
-        this.theOntology = ontology;
+    public OtherErrorWithOtherRestrictionTypeInitializer(
+            OAFOWLOntology ontology, 
+            OWLConcept erroneousConcept,
+            OWLClassExpression erroneousRestriction) {
+        
+        super(ontology, erroneousConcept);
+        
         this.erroneousRestriction = erroneousRestriction;
     }
 
     @Override
     public String getStyledErrorDescriptionText() {
         
+        OAFOWLOntology owlOntology = (OAFOWLOntology)getOntology();
+        
         String axiomStr = AxiomStringGenerator.getClassExpressionStr(
-                theOntology.getOntologyDataManager().getSourceOntology(), 
+                owlOntology.getOntologyDataManager().getSourceOntology(), 
                 erroneousRestriction, 
                 true);
         
@@ -42,7 +50,7 @@ public class OtherErrorWithOtherRestrictionTypeInitializer implements ErrorRepor
 
     @Override
     public OtherErrorWithOtherRestrictionType generateError(String comment, OntologyError.Severity severity) {
-        return new OtherErrorWithOtherRestrictionType(theOntology, comment, severity, erroneousRestriction);
+        return new OtherErrorWithOtherRestrictionType((OAFOWLOntology)getOntology(), comment, severity, erroneousRestriction);
     }
 
     @Override
