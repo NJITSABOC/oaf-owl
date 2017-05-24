@@ -31,4 +31,19 @@ public class OWLNATLayout extends BasicNATAdjustableLayout<OWLConcept> {
         
         super.getFocusConceptPanel().setRightClickMenuGenerator(new OWLFocusConceptRightClickMenu(mainPanel));
     }
+
+    @Override
+    public void reset() {
+        super.reset();
+        
+        restrictionPanel.reset();
+    }
+
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.restrictionPanel.setEnabled(value);
+    }
+    
 }

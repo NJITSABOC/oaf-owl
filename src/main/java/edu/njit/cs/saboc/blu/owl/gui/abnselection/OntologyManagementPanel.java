@@ -5,14 +5,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -163,10 +160,6 @@ public class OntologyManagementPanel extends JPanel {
         this.setLayout(new BorderLayout());
 
         this.add(contentPanel, BorderLayout.CENTER);
-        
-        this.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.BLACK), 
-                "Ontology Management"));
     }
     
     private void addToAutoLoad(File ontologyFile) {

@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ResultListPanel;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -98,4 +99,14 @@ public class RestrictionPanel extends ResultListPanel<OWLConcept, CombinedRestri
     protected Filterable<CombinedRestrictionResult> createFilterableEntry(CombinedRestrictionResult entry) {
         return new FilterableRestrictionEntry(getMainPanel(), entry);
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        btnShowAll.setEnabled(value);
+        btnShowMostSpecific.setEnabled(value);
+        btnShowStated.setEnabled(value);
+    }
+
 }

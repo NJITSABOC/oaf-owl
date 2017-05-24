@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
+import edu.njit.cs.saboc.blu.owl.nat.OWLBrowserDataSource;
 import edu.njit.cs.saboc.blu.owl.utils.BLUEntityRetriever;
 import edu.njit.cs.saboc.blu.owl.utils.OWLUtilities;
 import edu.njit.cs.saboc.blu.owl.utils.owlproperties.PropertyTypeAndUsage;
@@ -53,6 +54,8 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     
     private final OAFStateFileManager stateFileManager;
     
+    private OWLBrowserDataSource browserDataSource;
+    
     private Set<OWLConcept> ontologyRoots;
     
     private OAFOWLOntology oafOntology;
@@ -68,6 +71,7 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         
         this.stateFileManager = stateFileManager;
         this.manager = manager;
+        
         this.sourceOntology = ontology;
         this.ontologyFileName = ontologyName;
         this.ontologyFile = ontologyFile;
@@ -153,6 +157,8 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         }
                 
         this.oafOntology = new OAFOWLOntology(conceptHierarchy, this);
+        
+        this.browserDataSource = new OWLBrowserDataSource(this);
 
         initializeOntologyMetrics();
     }
@@ -183,6 +189,10 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     
     public OAFStateFileManager getOAFStateFileManager() {
         return stateFileManager;
+    }
+    
+    public OWLBrowserDataSource getClassBrowserDataSource() {
+        return browserDataSource;
     }
     
     public boolean allClassesHaveDefinedSuperclass() {

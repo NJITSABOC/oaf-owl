@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.njit.cs.saboc.blu.owl.gui.main;
 
 import edu.njit.cs.saboc.blu.core.gui.frame.OAFMainFrame;
@@ -14,9 +9,11 @@ import edu.njit.cs.saboc.blu.core.gui.frame.OAFMainFrame;
 public class Main {
 
     public static void main(String[] args) {
-  
-        OAFMainFrame bLUFrame = new OAFMainFrame(new OWLSelectionFrame());
-              
-
+        
+        if(args.length > 0 && args[0].equals("-natOnly")) {
+            NATOnlyFrame natFrame = new NATOnlyFrame();
+        } else {
+            OAFMainFrame bLUFrame = new OAFMainFrame(new OWLSelectionFrame());
+        }
     }  
 }
