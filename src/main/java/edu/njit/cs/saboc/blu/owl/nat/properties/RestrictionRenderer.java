@@ -26,13 +26,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.ClassExpressionType;
-import org.semanticweb.owlapi.model.OWLClassExpression;
 
 /**
  *
@@ -41,17 +39,15 @@ import org.semanticweb.owlapi.model.OWLClassExpression;
 public class RestrictionRenderer extends BaseFilterableRenderer<CombinedRestrictionResult> {
 
     private final NATBrowserPanel<OWLConcept> mainPanel;
-    private final OWLBrowserDataSource dataSource;
 
     private final JLabel inheritanceLabel;
     private final JPanel restrictionPanel;
     
     private final JLabel errorStatusLabel;
     
-    public RestrictionRenderer(NATBrowserPanel<OWLConcept> mainPanel, OWLBrowserDataSource dataSource) {
+    public RestrictionRenderer(NATBrowserPanel<OWLConcept> mainPanel) {
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         
         this.inheritanceLabel = new JLabel();
         this.inheritanceLabel.setOpaque(false);
@@ -108,12 +104,12 @@ public class RestrictionRenderer extends BaseFilterableRenderer<CombinedRestrict
         restrictionPanel.removeAll();
         
         if(restrictionResult instanceof CombinedPropertyRestrictionResult) {
-            PropertyRestrictionPanel detailsPanel = new PropertyRestrictionPanel(dataSource);
+            PropertyRestrictionPanel detailsPanel = new PropertyRestrictionPanel(mainPanel);
             detailsPanel.display((Filterable<CombinedPropertyRestrictionResult>)(Filterable<?>)value);
             
             this.restrictionPanel.add(detailsPanel, BorderLayout.CENTER);
         } else {
-            OtherRestrictionTypePanel detailsPanel = new OtherRestrictionTypePanel(dataSource);
+            OtherRestrictionTypePanel detailsPanel = new OtherRestrictionTypePanel(mainPanel);
             detailsPanel.display((Filterable<OtherCombinedRestrictionResult>)(Filterable<?>)value);
             
             this.restrictionPanel.add(detailsPanel, BorderLayout.CENTER);
@@ -151,66 +147,84 @@ public class RestrictionRenderer extends BaseFilterableRenderer<CombinedRestrict
     }
     
     private void setSimpleOPRestrictionErrorText(ObjectPropertyCombinedRestrictionResult opResult) {
-        if(mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
-            AuditSet<OWLConcept> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
-            OWLConcept focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
-            
-            OWLInheritableProperty property = new OWLInheritableProperty(
-                    opResult.getProperty(), 
-                    InheritanceType.Introduced, 
-                    PropertyTypeAndUsage.OP_RESTRICTION,
-                    dataSource.getDataManager());
-            
-            OWLConcept range = dataSource.getDataManager().getOntology().getOWLConceptFor(opResult.getFiller().asOWLClass());
-            
-            List<IncorrectSemanticRelationshipError<OWLConcept, InheritableProperty>> relatedErrors = 
-                    auditSet.getRelatedSemanticRelationshipErrors(focusConcept, property, range);
-            
-            if(relatedErrors.isEmpty()) {
-                return;
-            }
-            
-            if(relatedErrors.size() == 1) {
-                this.errorStatusLabel.setText("Error");
-            } else {
-                this.errorStatusLabel.setText(String.format("Errors (%d)", relatedErrors.size()));
-            }
+        
+        if(!mainPanel.getDataSource().isPresent()) {
+            return;
+        }
+        
+        if(!mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+            return;
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+
+        AuditSet<OWLConcept> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
+        OWLConcept focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
+
+        OWLInheritableProperty property = new OWLInheritableProperty(
+                opResult.getProperty(),
+                InheritanceType.Introduced,
+                PropertyTypeAndUsage.OP_RESTRICTION,
+                dataSource.getDataManager());
+
+        OWLConcept range = dataSource.getDataManager().getOntology().getOWLConceptFor(opResult.getFiller().asOWLClass());
+
+        List<IncorrectSemanticRelationshipError<OWLConcept, InheritableProperty>> relatedErrors
+                = auditSet.getRelatedSemanticRelationshipErrors(focusConcept, property, range);
+
+        if (relatedErrors.isEmpty()) {
+            return;
+        }
+
+        if (relatedErrors.size() == 1) {
+            this.errorStatusLabel.setText("Error");
+        } else {
+            this.errorStatusLabel.setText(String.format("Errors (%d)", relatedErrors.size()));
         }
     }
     
     private void setOtherRestrictionErrorText(CombinedRestrictionResult<?> result) {
         
-        if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
-            AuditSet<OWLConcept> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
-            OWLConcept focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
-
-            List<OtherRestrictionTypeError> relatedErrors = dataSource.getRelatedOtherRestrictionTypeErrors(auditSet, focusConcept, result);
-
-            if (relatedErrors.isEmpty()) {
-                return;
-            }
-
-            if (relatedErrors.size() == 1) {
-                this.errorStatusLabel.setText("Error");
-            } else {
-                this.errorStatusLabel.setText(String.format("Errors (%d)", relatedErrors.size()));
-            }
+        if(!mainPanel.getDataSource().isPresent()) {
+            return;
         }
+        
+        if(!mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+            return;
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+        
+        AuditSet<OWLConcept> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
+        OWLConcept focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
+
+        List<OtherRestrictionTypeError> relatedErrors = dataSource.getRelatedOtherRestrictionTypeErrors(auditSet, focusConcept, result);
+
+        if (relatedErrors.isEmpty()) {
+            return;
+        }
+
+        if (relatedErrors.size() == 1) {
+            this.errorStatusLabel.setText("Error");
+        } else {
+            this.errorStatusLabel.setText(String.format("Errors (%d)", relatedErrors.size()));
+        }
+
     }
 }
 
 abstract class RestrictionDetailsPanel<T extends CombinedRestrictionResult> extends JPanel {
     
-    private final OWLBrowserDataSource dataSource;
+    private final NATBrowserPanel<OWLConcept> mainPanel;
     
-    public RestrictionDetailsPanel(OWLBrowserDataSource dataSource) {
-        this.dataSource = dataSource;
+    public RestrictionDetailsPanel(NATBrowserPanel<OWLConcept> mainPanel) {
+        this.mainPanel = mainPanel;
         
         this.setOpaque(false);
     }
     
-    public OWLBrowserDataSource getDataSource() {
-        return dataSource;
+    public NATBrowserPanel<OWLConcept> getMainPanel() {
+        return mainPanel;
     }
     
     public abstract void display(Filterable<T> result);
@@ -221,9 +235,9 @@ class PropertyRestrictionPanel extends RestrictionDetailsPanel<CombinedPropertyR
     private final JLabel propertyTypeLabel;
     private final JLabel fillerLabel;
 
-    public PropertyRestrictionPanel(OWLBrowserDataSource dataSource) {
+    public PropertyRestrictionPanel(NATBrowserPanel<OWLConcept> mainPanel) {
         
-        super(dataSource);
+        super(mainPanel);
 
         this.setOpaque(false);
         
@@ -273,10 +287,17 @@ class PropertyRestrictionPanel extends RestrictionDetailsPanel<CombinedPropertyR
     
     @Override
     public void display(Filterable<CombinedPropertyRestrictionResult> result) {
+        
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)getMainPanel().getDataSource().get();
+        
         CombinedPropertyRestrictionResult restrictionResult = result.getObject();
         
         String propertyName = OWLUtilities.getPropertyLabel(
-                getDataSource().getDataManager().getSourceOntology(), 
+                dataSource.getDataManager().getSourceOntology(), 
                 restrictionResult.getProperty());
         
         if(result.getCurrentFilter().isPresent()) {
@@ -292,12 +313,12 @@ class PropertyRestrictionPanel extends RestrictionDetailsPanel<CombinedPropertyR
 
             if(result.getCurrentFilter().isPresent()) {
                 fillerText = AxiomStringGenerator.getStyledClassExpressionStrFiltered(
-                        getDataSource().getDataManager().getSourceOntology(),
+                        dataSource.getDataManager().getSourceOntology(),
                         opRestrictionResult.getFiller(),
                         result.getCurrentFilter().get());
             } else {
                 fillerText = AxiomStringGenerator.getClassExpressionStr(
-                        getDataSource().getDataManager().getSourceOntology(),
+                        dataSource.getDataManager().getSourceOntology(),
                         opRestrictionResult.getFiller(),
                         true);
             }
@@ -319,8 +340,8 @@ class OtherRestrictionTypePanel extends RestrictionDetailsPanel<OtherCombinedRes
     
     private final JLabel restrictionLabel;
     
-    public OtherRestrictionTypePanel(OWLBrowserDataSource dataSource) {
-        super(dataSource);
+    public OtherRestrictionTypePanel(NATBrowserPanel<OWLConcept> mainPanel) {
+        super(mainPanel);
         
         this.restrictionLabel = new JLabel();
         this.restrictionLabel.setOpaque(false);
@@ -333,6 +354,12 @@ class OtherRestrictionTypePanel extends RestrictionDetailsPanel<OtherCombinedRes
 
     @Override
     public void display(Filterable<OtherCombinedRestrictionResult> result) {
+   
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)getMainPanel().getDataSource().get();
         
         OtherCombinedRestrictionResult unknownTypeResult = result.getObject();
         
@@ -340,12 +367,12 @@ class OtherRestrictionTypePanel extends RestrictionDetailsPanel<OtherCombinedRes
         
         if(result.getCurrentFilter().isPresent()) {
             str = AxiomStringGenerator.getStyledClassExpressionStrFiltered(
-                    getDataSource().getDataManager().getSourceOntology(), 
+                    dataSource.getDataManager().getSourceOntology(), 
                     unknownTypeResult.getRestriction(), 
                     result.getCurrentFilter().get());
         } else {
             str = AxiomStringGenerator.getClassExpressionStr(
-                    getDataSource().getDataManager().getSourceOntology(), 
+                    dataSource.getDataManager().getSourceOntology(), 
                     unknownTypeResult.getRestriction(), 
                     true);
         }

@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.owl.nat;
 
 import edu.njit.cs.saboc.blu.owl.nat.restrictionresult.CombinedRestrictionResult;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ResultPanel.DataRetriever;
 import java.util.ArrayList;
 
@@ -11,13 +12,21 @@ import java.util.ArrayList;
  */
 public class OWLNATDataRetrievers {
     
-    public static DataRetriever<OWLConcept, ArrayList<OWLConcept>> getEquivSuperclasses(OWLBrowserDataSource dataSource) {
+    public static DataRetriever<OWLConcept, ArrayList<OWLConcept>> getEquivSuperclasses(
+            NATBrowserPanel<OWLConcept> mainPanel) {
         
         return new DataRetriever<OWLConcept, ArrayList<OWLConcept>>() {
 
             @Override
             public ArrayList<OWLConcept> getData(OWLConcept concept) {
-                return dataSource.getSuperclassesInEquivalences(concept);
+                
+                if(mainPanel.getDataSource().isPresent()) {
+                    OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+                    
+                    return dataSource.getSuperclassesInEquivalences(concept);
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -27,13 +36,21 @@ public class OWLNATDataRetrievers {
         };
     }
     
-    public static DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>> getAllRestrictionsRetriever(OWLBrowserDataSource dataSource) {
+    public static DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>> 
+        getAllRestrictionsRetriever(NATBrowserPanel<OWLConcept> mainPanel) {
         
         return new DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>>() {
 
             @Override
             public ArrayList<CombinedRestrictionResult> getData(OWLConcept concept) {
-                return dataSource.getAllRestrictions(concept);
+                
+                if(mainPanel.getDataSource().isPresent()) {
+                    OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+                    
+                    return dataSource.getAllRestrictions(concept);
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -43,13 +60,21 @@ public class OWLNATDataRetrievers {
         };
     }
     
-    public static DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>> getStatedRestrictionsRetriever(OWLBrowserDataSource dataSource) {
+    public static DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>> 
+        getStatedRestrictionsRetriever(NATBrowserPanel<OWLConcept> mainPanel) {
         
         return new DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>>() {
 
             @Override
             public ArrayList<CombinedRestrictionResult> getData(OWLConcept concept) {
-                return dataSource.getStatedRestrictions(concept);
+                
+                if(mainPanel.getDataSource().isPresent()) {
+                    OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+                    
+                    return dataSource.getStatedRestrictions(concept);
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -59,13 +84,21 @@ public class OWLNATDataRetrievers {
         };
     }
     
-    public static DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>> getMostSpecificRestrictionsRetriever(OWLBrowserDataSource dataSource) {
+    public static DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>> 
+        getMostSpecificRestrictionsRetriever(NATBrowserPanel<OWLConcept> mainPanel) {
         
         return new DataRetriever<OWLConcept, ArrayList<CombinedRestrictionResult>>() {
 
             @Override
             public ArrayList<CombinedRestrictionResult> getData(OWLConcept concept) {
-                return dataSource.getMostSpecificRestrictions(concept);
+                
+                if(mainPanel.getDataSource().isPresent()) {
+                    OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+                    
+                    return dataSource.getMostSpecificRestrictions(concept);
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override

@@ -11,14 +11,11 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
  */
 public class StatedSuperclassesPanel extends ConceptListPanel<OWLConcept> {
     
-    public StatedSuperclassesPanel(
-            NATBrowserPanel<OWLConcept> mainPanel, 
-            OWLBrowserDataSource dataSource) {
+    public StatedSuperclassesPanel(NATBrowserPanel<OWLConcept> mainPanel) {
         
         super(mainPanel, 
-                dataSource,
-                OWLNATDataRetrievers.getEquivSuperclasses(dataSource),
-                new SimpleConceptRenderer<>(mainPanel, dataSource), 
+                OWLNATDataRetrievers.getEquivSuperclasses(mainPanel),
+                new SimpleConceptRenderer<>(mainPanel), 
                 true,
                 true,
                 true);

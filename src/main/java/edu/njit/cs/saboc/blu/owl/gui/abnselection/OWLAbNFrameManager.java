@@ -166,7 +166,7 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
         NATBrowserFrame<OWLConcept> browserFrame = new NATBrowserFrame<>(
                 mainFrame,
                 dataSource,
-                new OWLNATLayout(dataSource));
+                new OWLNATLayout());
 
         if(focusConcept.isPresent()) {
             browserFrame.nagivateTo(focusConcept.get());

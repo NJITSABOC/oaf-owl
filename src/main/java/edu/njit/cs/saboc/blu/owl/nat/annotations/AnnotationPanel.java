@@ -31,10 +31,11 @@ public class AnnotationPanel extends BaseNATPanel<OWLConcept> {
     
     public AnnotationPanel(
             NATBrowserPanel<OWLConcept> mainPanel, 
-            OWLBrowserDataSource dataSource, 
             OWLConcept concept) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
         
         Map<String, Set<String>> annotations = dataSource.getAnnotations(concept);
         

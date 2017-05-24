@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.nat.AxiomStringGenerator;
 import edu.njit.cs.saboc.blu.owl.nat.OWLBrowserDataSource;
-import edu.njit.cs.saboc.blu.owl.nat.error.OtherRestrictionTypeError;
 import edu.njit.cs.saboc.blu.owl.nat.restrictionresult.CombinedPropertyRestrictionResult;
 import edu.njit.cs.saboc.blu.owl.nat.restrictionresult.CombinedRestrictionResult;
 import edu.njit.cs.saboc.blu.owl.nat.restrictionresult.DataPropertyCombinedRestrictionResult;
@@ -17,7 +16,6 @@ import edu.njit.cs.saboc.blu.owl.utils.owlproperties.PropertyTypeAndUsage;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.IncorrectSemanticRelationshipError;
 import java.util.List;
 import org.semanticweb.owlapi.model.ClassExpressionType;
 
@@ -28,23 +26,26 @@ import org.semanticweb.owlapi.model.ClassExpressionType;
 public class FilterableRestrictionEntry extends Filterable<CombinedRestrictionResult> {
     
     private final NATBrowserPanel<OWLConcept> mainPanel;
-    private final OWLBrowserDataSource dataSource;
     
     private final CombinedRestrictionResult<?> result;
     
     public FilterableRestrictionEntry(
             NATBrowserPanel<OWLConcept> mainPanel, 
-            OWLBrowserDataSource dataSource, 
             CombinedRestrictionResult<?> result) {
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         
         this.result = result;
     }
 
     @Override
     public boolean containsFilter(String filter) {
+        
+        if(!mainPanel.getDataSource().isPresent()) {
+            return false;
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
         
         filter = filter.toLowerCase();
         
@@ -95,6 +96,12 @@ public class FilterableRestrictionEntry extends Filterable<CombinedRestrictionRe
     @Override
     public String getToolTipText() {
         
+        if(!mainPanel.getDataSource().isPresent()) {
+            return null;
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource)mainPanel.getDataSource().get();
+        
         StringBuilder builder = new StringBuilder("<html><font size= '4'>");
         
         if(result instanceof CombinedPropertyRestrictionResult) {
@@ -143,50 +150,55 @@ public class FilterableRestrictionEntry extends Filterable<CombinedRestrictionRe
     
     private String getErrorReportText(CombinedRestrictionResult combinedResult) {
         
-        if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
-            AuditSet<OWLConcept> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
-            OWLConcept focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
-            
-            List<? extends OntologyError<OWLConcept>> reportedErrors;
+        if (!mainPanel.getDataSource().isPresent()) {
+            return "";
+        }
+        
+        if(!mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+            return "";
+        }
+        
+        OWLBrowserDataSource dataSource = (OWLBrowserDataSource) mainPanel.getDataSource().get();
 
-            if (combinedResult instanceof ObjectPropertyCombinedRestrictionResult) {
-                ObjectPropertyCombinedRestrictionResult opResult = (ObjectPropertyCombinedRestrictionResult) combinedResult;
+        AuditSet<OWLConcept> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
+        OWLConcept focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
 
-                if (opResult.getFiller().getClassExpressionType() == ClassExpressionType.OWL_CLASS) {
+        List<? extends OntologyError<OWLConcept>> reportedErrors;
 
-                    OWLInheritableProperty property = new OWLInheritableProperty(
-                            opResult.getProperty(),
-                            InheritableProperty.InheritanceType.Introduced,
-                            PropertyTypeAndUsage.OP_RESTRICTION,
-                            dataSource.getDataManager());
+        if (combinedResult instanceof ObjectPropertyCombinedRestrictionResult) {
+            ObjectPropertyCombinedRestrictionResult opResult = (ObjectPropertyCombinedRestrictionResult) combinedResult;
 
-                    OWLConcept range = dataSource.getDataManager().getOntology().getOWLConceptFor(opResult.getFiller().asOWLClass());
+            if (opResult.getFiller().getClassExpressionType() == ClassExpressionType.OWL_CLASS) {
 
-                    reportedErrors = auditSet.getRelatedSemanticRelationshipErrors(focusConcept, property, range);
-                } else {
-                    reportedErrors = dataSource.getRelatedOtherRestrictionTypeErrors(auditSet, focusConcept, result);
-                }
+                OWLInheritableProperty property = new OWLInheritableProperty(
+                        opResult.getProperty(),
+                        InheritableProperty.InheritanceType.Introduced,
+                        PropertyTypeAndUsage.OP_RESTRICTION,
+                        dataSource.getDataManager());
+
+                OWLConcept range = dataSource.getDataManager().getOntology().getOWLConceptFor(opResult.getFiller().asOWLClass());
+
+                reportedErrors = auditSet.getRelatedSemanticRelationshipErrors(focusConcept, property, range);
             } else {
                 reportedErrors = dataSource.getRelatedOtherRestrictionTypeErrors(auditSet, focusConcept, result);
             }
-            
-            String text = "";
-            
-            if(!reportedErrors.isEmpty()) {
-                text += String.format("<p><p><font size = '4'><b>Reported Errors (%d):</b></font><br>", reportedErrors.size());
-
-                for (OntologyError<OWLConcept> error : reportedErrors) {
-                    text += error.getTooltipText();
-                    text += "<p>";
-                }
-            }
-            
-            return text;
+        } else {
+            reportedErrors = dataSource.getRelatedOtherRestrictionTypeErrors(auditSet, focusConcept, result);
         }
-        
-        return "";
+
+        String text = "";
+
+        if (!reportedErrors.isEmpty()) {
+            text += String.format("<p><p><font size = '4'><b>Reported Errors (%d):</b></font><br>", reportedErrors.size());
+
+            for (OntologyError<OWLConcept> error : reportedErrors) {
+                text += error.getTooltipText();
+                text += "<p>";
+            }
+        }
+
+        return text;
     }
-    
 
     @Override
     public String getClipboardText() {
