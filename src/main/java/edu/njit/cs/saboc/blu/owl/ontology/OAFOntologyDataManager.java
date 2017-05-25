@@ -79,7 +79,7 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         reinitialize();
     }
     
-    protected final void reinitialize() {
+    public void reinitialize() {
         OWLClass thing = manager.getOWLDataFactory().getOWLThing();
         
         OWLConcept thingConcept = new OWLConcept(thing, this);
@@ -156,9 +156,8 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
             }
         }
                 
-        this.oafOntology = new OAFOWLOntology(conceptHierarchy, this);
-        
-        this.browserDataSource = new OWLBrowserDataSource(this);
+        setOAFOntology(new OAFOWLOntology(conceptHierarchy, this));
+        setClassBrowserDataSource(new OWLBrowserDataSource(this));
 
         initializeOntologyMetrics();
     }
@@ -183,12 +182,20 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         return ontologyFileName;
     }
     
+    protected void setOAFOntology(OAFOWLOntology oafOntology) {
+        this.oafOntology = oafOntology;
+    }
+    
     public OAFOWLOntology getOntology() {
         return oafOntology;
     }
     
     public OAFStateFileManager getOAFStateFileManager() {
         return stateFileManager;
+    }
+    
+    protected void setClassBrowserDataSource(OWLBrowserDataSource dataSource) {
+        this.browserDataSource = dataSource;
     }
     
     public OWLBrowserDataSource getClassBrowserDataSource() {
@@ -658,7 +665,6 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
             OWLConcept source, 
             OWLQuantifiedObjectRestrictionImpl restriction, 
             PropertyTypeAndUsage typeAndUsage) throws PropertyAnonymousException, UnsupportedFillerTypeException {
-        
         
         OWLObjectPropertyExpression opExpr = restriction.getProperty();
 
