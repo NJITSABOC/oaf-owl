@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.aggregate;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.ExpandedSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregateAncestorSubtaxonomy;
@@ -24,10 +25,9 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
     public static final PAreaTaxonomy createAggregatedOWLPAreaTaxonomy(
             PAreaTaxonomy sourceTaxonomy, 
             OWLTaxonomy owlTaxonomy, 
-            int minBound,
-            boolean isWeighteAggregated) {
+            AggregatedProperty aggregatedProperty) {
         
-         PAreaTaxonomy taxonomy = AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(sourceTaxonomy, minBound, isWeighteAggregated);
+         PAreaTaxonomy taxonomy = AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(sourceTaxonomy, aggregatedProperty);
         
         if(taxonomy.isAggregated()) {
             return new OWLAggregatePAreaTaxonomy(
@@ -48,9 +48,8 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
             AggregatePAreaTaxonomy taxonomy) {
         
         super(taxonomy.getNonAggregateSourceAbN(), 
-                taxonomy.getAggregateBound(),
-                taxonomy,
-                taxonomy.isWeightedAggregated());
+                taxonomy.getAggregatedProperty(),
+                taxonomy);
         
         this.dataManager = dataManager;
         this.typesAndUsages = typesAndUsages;
@@ -73,7 +72,7 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
     
     @Override
     public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, smallestNode, isWeighteAggregated);
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, new AggregatedProperty(smallestNode, isWeighteAggregated));
     }
 
     @Override

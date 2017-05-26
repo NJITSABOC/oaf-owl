@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateCluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateClusterTribalAbstractionNetwork;
@@ -16,7 +17,7 @@ public class OWLAggregateClusterTAN extends AggregateClusterTribalAbstractionNet
     private final OAFOntologyDataManager dataManager;
     
     public OWLAggregateClusterTAN(OAFOntologyDataManager dataManager, AggregateClusterTribalAbstractionNetwork tan) {
-        super(tan.getNonAggregateSourceAbN(), tan.getAggregateBound(), tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy(), tan.isWeightedAggregated());
+        super(tan.getNonAggregateSourceAbN(), tan.getAggregatedProperty(), tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
         
         this.dataManager = dataManager;
     }
@@ -40,8 +41,7 @@ public class OWLAggregateClusterTAN extends AggregateClusterTribalAbstractionNet
     public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
         ClusterTribalAbstractionNetwork tan = AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(
                 this.getNonAggregateSourceAbN(), 
-                smallestNode,
-                isWeighteAggregated);
+                new AggregatedProperty(smallestNode, isWeighteAggregated));
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(dataManager, (AggregateClusterTribalAbstractionNetwork)tan);

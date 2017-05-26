@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.abn.range;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.DescendantTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateAncestorTargetAbN;
@@ -31,8 +32,8 @@ public class OWLAggregateDescendantRangeAbN extends AggregateDescendantTargetAbN
         return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(
                 this.getNonAggregateSourceAbN(), 
                 this, 
-                smallestNode,
-                isWeighteAggregated);
+                new AggregatedProperty(smallestNode, isWeighteAggregated)
+                );
     }
     
     @Override
