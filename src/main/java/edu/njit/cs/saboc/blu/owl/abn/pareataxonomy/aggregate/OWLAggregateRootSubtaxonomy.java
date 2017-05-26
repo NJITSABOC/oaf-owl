@@ -50,8 +50,8 @@ public class OWLAggregateRootSubtaxonomy extends AggregateRootSubtaxonomy implem
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, smallestNode);
+    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, smallestNode, isWeighteAggregated);
     }
 
     @Override

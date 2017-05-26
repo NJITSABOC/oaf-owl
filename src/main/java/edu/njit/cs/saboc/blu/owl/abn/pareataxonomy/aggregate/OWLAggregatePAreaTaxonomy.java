@@ -24,9 +24,10 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
     public static final PAreaTaxonomy createAggregatedOWLPAreaTaxonomy(
             PAreaTaxonomy sourceTaxonomy, 
             OWLTaxonomy owlTaxonomy, 
-            int minBound) {
+            int minBound,
+            boolean isWeighteAggregated) {
         
-         PAreaTaxonomy taxonomy = AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(sourceTaxonomy, minBound);
+         PAreaTaxonomy taxonomy = AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(sourceTaxonomy, minBound, isWeighteAggregated);
         
         if(taxonomy.isAggregated()) {
             return new OWLAggregatePAreaTaxonomy(
@@ -48,7 +49,8 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
         
         super(taxonomy.getNonAggregateSourceAbN(), 
                 taxonomy.getAggregateBound(),
-                taxonomy);
+                taxonomy,
+                taxonomy.isWeightedAggregated());
         
         this.dataManager = dataManager;
         this.typesAndUsages = typesAndUsages;
@@ -70,8 +72,8 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, smallestNode);
+    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, smallestNode, isWeighteAggregated);
     }
 
     @Override

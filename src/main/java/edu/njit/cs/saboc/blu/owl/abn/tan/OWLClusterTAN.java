@@ -54,9 +54,9 @@ public class OWLClusterTAN<T extends Cluster> extends ClusterTribalAbstractionNe
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
         
-        ClusterTribalAbstractionNetwork tan = super.getAggregated(smallestNode);
+        ClusterTribalAbstractionNetwork tan = super.getAggregated(smallestNode, isWeighteAggregated);
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(

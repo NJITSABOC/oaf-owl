@@ -16,7 +16,7 @@ public class OWLAggregateClusterTAN extends AggregateClusterTribalAbstractionNet
     private final OAFOntologyDataManager dataManager;
     
     public OWLAggregateClusterTAN(OAFOntologyDataManager dataManager, AggregateClusterTribalAbstractionNetwork tan) {
-        super(tan.getNonAggregateSourceAbN(), tan.getAggregateBound(), tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
+        super(tan.getNonAggregateSourceAbN(), tan.getAggregateBound(), tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy(), tan.isWeightedAggregated());
         
         this.dataManager = dataManager;
     }
@@ -37,10 +37,11 @@ public class OWLAggregateClusterTAN extends AggregateClusterTribalAbstractionNet
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
         ClusterTribalAbstractionNetwork tan = AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(
                 this.getNonAggregateSourceAbN(), 
-                smallestNode);
+                smallestNode,
+                isWeighteAggregated);
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(dataManager, (AggregateClusterTribalAbstractionNetwork)tan);

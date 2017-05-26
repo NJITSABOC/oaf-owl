@@ -18,9 +18,10 @@ public class OWLAggregateRangeAbstractionNetwork extends AggregateTargetAbN impl
      public static final TargetAbstractionNetwork createAggregatedOWLRangeAbN(
             TargetAbstractionNetwork sourceAbN, 
             OWLAbstractionNetwork owlAbN, 
-            int minBound) {
+            int minBound,
+            boolean isWeighteAggregated) {
         
-        TargetAbstractionNetwork baseAggregate = AggregateTargetAbN.createAggregated(sourceAbN, minBound);
+        TargetAbstractionNetwork baseAggregate = AggregateTargetAbN.createAggregated(sourceAbN, minBound, isWeighteAggregated);
         
         if(baseAggregate.isAggregated()) {
             return new OWLAggregateRangeAbstractionNetwork((AggregateTargetAbN)baseAggregate, owlAbN.getDataManager());
@@ -43,8 +44,8 @@ public class OWLAggregateRangeAbstractionNetwork extends AggregateTargetAbN impl
     }
 
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(this.getNonAggregateSourceAbN(), this, smallestNode);
+    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
+        return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(this.getNonAggregateSourceAbN(), this, smallestNode, isWeighteAggregated);
     }
 
     @Override

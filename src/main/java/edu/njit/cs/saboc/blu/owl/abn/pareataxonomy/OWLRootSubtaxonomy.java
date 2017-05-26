@@ -39,8 +39,8 @@ public class OWLRootSubtaxonomy extends RootSubtaxonomy implements OWLTaxonomy {
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, smallestNode);
+    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, smallestNode, isWeighteAggregated);
     }
     
     @Override

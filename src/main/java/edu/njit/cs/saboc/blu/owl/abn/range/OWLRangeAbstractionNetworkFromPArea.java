@@ -23,11 +23,12 @@ public class OWLRangeAbstractionNetworkFromPArea extends TargetAbstractionNetwor
     }
 
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode) {
+    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
         
         return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(
                 this, 
                 this, 
-                smallestNode);
+                smallestNode,
+                isWeighteAggregated);
     }
 }
