@@ -79,17 +79,25 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         reinitialize();
     }
     
-    public void reinitialize() {
+    public final void reinitialize() {
+        setOAFOntology(createOAFOntology());
+        
+        initializeOntologyMetrics();
+        
+        this.browserDataSource = new OWLBrowserDataSource(this);
+    }
+    
+    protected OAFOWLOntology createOAFOntology() {
         OWLClass thing = manager.getOWLDataFactory().getOWLThing();
-        
+
         OWLConcept thingConcept = new OWLConcept(thing, this);
-        
+
         Map<OWLClass, OWLConcept> conceptMap = new HashMap<>();
         conceptMap.put(thing, thingConcept);
 
         Set<OWLClass> clses = sourceOntology.getClassesInSignature(true);
-        
-        clses.forEach( (cls) -> {
+
+        clses.forEach((cls) -> {
             conceptMap.put(cls, new OWLConcept(cls, this));
         });
 
@@ -98,27 +106,27 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         Set<OWLConcept> currentOntologyRoots = new HashSet<>();
 
         SimpleRootClassChecker checker = new SimpleRootClassChecker(Collections.singleton(sourceOntology));
-        
+
         clses.forEach((cls) -> {
-            if (!OWLUtilities.classIsObsolete(sourceOntology, cls) && 
-                    !cls.isOWLNothing() && 
-                    !cls.isOWLThing()) { // Ignore obsolete classes, nothing, and thing for specific roots
-                
+            if (!OWLUtilities.classIsObsolete(sourceOntology, cls)
+                    && !cls.isOWLNothing()
+                    && !cls.isOWLThing()) { // Ignore obsolete classes, nothing, and thing for specific roots
+
                 if (checker.isRootClass(cls)) {
                     currentOntologyRoots.add(conceptMap.get(cls));
                 }
             }
         });
-        
+
         this.ontologyRoots = currentOntologyRoots;
-        
+
         currentOntologyRoots.forEach((concept) -> {
             conceptHierarchy.addEdge(concept, conceptHierarchy.getRoot());
         });
 
         for (OWLClass cls : clses) {
             OWLConcept concept = conceptMap.get(cls);
-            
+
             Collection<OWLClassExpression> superclasses = BLUEntityRetriever.getSuperClasses(cls, sourceOntology);
 
             superclasses.forEach((superCls) -> {
@@ -155,11 +163,8 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
                 });
             }
         }
-                
-        setOAFOntology(new OAFOWLOntology(conceptHierarchy, this));
-        setClassBrowserDataSource(new OWLBrowserDataSource(this));
-
-        initializeOntologyMetrics();
+        
+        return new OAFOWLOntology(conceptHierarchy, this);
     }
     
     public Set<OWLConcept> getOntologyRoots() {
@@ -192,10 +197,6 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     
     public OAFStateFileManager getOAFStateFileManager() {
         return stateFileManager;
-    }
-    
-    protected void setClassBrowserDataSource(OWLBrowserDataSource dataSource) {
-        this.browserDataSource = dataSource;
     }
     
     public OWLBrowserDataSource getClassBrowserDataSource() {
