@@ -47,10 +47,11 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {
 
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) taxonomy;
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager),
-                owlParser);
+
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
 
         graphFrame.displayPAreaTaxonomy(taxonomy);
 
@@ -59,13 +60,11 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
     
     @Override
     public void displayTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan) {
-
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) tan;
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
-                mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
-                owlParser);
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
 
         graphFrame.displayTAN(tan);
 
@@ -75,12 +74,13 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
     @Override
     public void displayDisjointPAreaTaxonomy(
         DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
+        
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) disjointTaxonomy.getParentAbstractionNetwork();
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
-                mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
-                owlParser);
+        
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
 
         graphFrame.displayDisjointPAreaTaxonomy(
                 (DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea>)(DisjointAbstractionNetwork<?, ?, ?>)disjointTaxonomy);
@@ -93,11 +93,11 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
             DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN) {
 
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) disjointTAN.getParentAbstractionNetwork();
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
-                mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
-                owlParser);
+        
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
         
         graphFrame.displayDisjointTAN(
                 (DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster>)(DisjointAbstractionNetwork<?, ?, ?>)
@@ -120,11 +120,11 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
     public void displayTargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
 
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) targetAbN;
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
-                mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
-                owlParser);
+        
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
 
         graphFrame.displayTargetAbstractionNetwork(targetAbN);
 
@@ -135,11 +135,10 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
     public void displayAreaTaxonomy(PAreaTaxonomy taxonomy) {
 
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) taxonomy;
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
-                mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
-                owlParser);
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
 
         graphFrame.displayAreaTaxonomy(taxonomy);
 
@@ -150,11 +149,10 @@ public class OWLAbNFrameManager extends AbNDisplayManager {
     public void displayBandTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan) {
 
         OWLAbstractionNetwork owlan = (OWLAbstractionNetwork) tan;
-        OWLDerivationParser owlParser = new OWLDerivationParser(owlan.getDataManager());
-        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(
-                mainFrame, 
-                new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager), 
-                owlParser);
+        OWLMultiAbNGraphFrameInitializers initializers = new OWLMultiAbNGraphFrameInitializers(owlan.getDataManager(), this, warningManager);
+        
+        MultiAbNGraphFrame graphFrame = new MultiAbNGraphFrame(mainFrame);
+        graphFrame.setInitializers(initializers);
 
         graphFrame.displayBandTAN(tan);
 

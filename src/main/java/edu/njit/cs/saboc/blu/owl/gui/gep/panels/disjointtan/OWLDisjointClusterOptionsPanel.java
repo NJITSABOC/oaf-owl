@@ -57,10 +57,9 @@ public class OWLDisjointClusterOptionsPanel extends NodeOptionsPanel {
         });
         
         super.addOptionButton(ancestorBtn);
-                
         
         CreateTANFromSinglyRootedNodeButton tanBtn = new CreateTANFromSinglyRootedNodeButton(
-                new TANFactory(config.getAbstractionNetwork().getDerivation().getSourceOntology()),
+                new TANFactory(owlAbN.getDataManager().getOntology()),
                 config, 
                 new DisplayTANAction(config.getUIConfiguration().getAbNDisplayManager()));
         

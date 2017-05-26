@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.owl.gui.graphframe.initializers;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
@@ -24,9 +25,11 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers.DisjointA
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers.PAreaTaxonomyInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers.TANInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers.TargetAbNInitializer;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
 import edu.njit.cs.saboc.blu.owl.abn.OWLAbstractionNetwork;
+import edu.njit.cs.saboc.blu.owl.abnhistory.OWLDerivationParser;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OWLAbNFrameManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OWLAbNWizardPanel;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.disjointpareataxonomy.configuration.OWLDisjointPAreaTaxonomyConfigurationFactory;
@@ -42,7 +45,7 @@ import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
  */
 public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializers {
 
-    private final OAFOntologyDataManager ontologyManager;
+    private final OAFOntologyDataManager dataManager;
     
     private final OWLAbNFrameManager frameManager;
     
@@ -53,7 +56,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
             OWLAbNFrameManager frameManager,
             AbNWarningManager warningManager) {
         
-        this.ontologyManager = ontologyManager;
+        this.dataManager = ontologyManager;
         this.frameManager = frameManager;
         this.warningManager = warningManager;
     }
@@ -283,13 +286,22 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
         
         try {
             
-            return ontologyManager.getOAFStateFileManager().getRecentAbNWorkspaces(
-                    ontologyManager.getOntologyFile());
+            return dataManager.getOAFStateFileManager().getRecentAbNWorkspaces(dataManager.getOntologyFile());
             
         } catch (RecentlyOpenedFileException rofe) {
             
         }
         
         return null;
+    }
+
+    @Override
+    public Ontology getSourceOntology() {
+        return dataManager.getOntology();
+    }
+
+    @Override
+    public AbNDerivationParser getAbNParser() {
+        return new OWLDerivationParser(dataManager);
     }
 }

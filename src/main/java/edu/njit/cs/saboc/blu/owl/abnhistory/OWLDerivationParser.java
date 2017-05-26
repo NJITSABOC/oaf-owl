@@ -15,6 +15,7 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLPAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.provenance.OWLImportSubtaxonomyDerivation;
@@ -34,7 +35,8 @@ public class OWLDerivationParser extends AbNDerivationParser {
 
     public OWLDerivationParser(OAFOntologyDataManager manager) {
         
-        super(manager.getOntology(), 
+        super(
+                (Ontology<Concept>)(Ontology<?>)manager.getOntology(), 
                 new OWLClassLocationDataFactory(manager.getOntology()), 
                 new OWLPropertyLocationDataFactory(manager), 
                 new OWLAbNDerivationFactory(manager));
@@ -130,12 +132,10 @@ public class OWLDerivationParser extends AbNDerivationParser {
         OWLRangeAbstractionNetworkFactory factory = new OWLRangeAbstractionNetworkFactory(manager, sourceHierarchy, owlProperty, targetHierarchy);
 
         return new TargetAbNDerivation(
-                manager.getOntology(),
                 factory,
                 sourceHierarchyRoot,
                 property.iterator().next(),
                 targetHierarchyRoot);
-
     }
 
     public Set<PropertyTypeAndUsage> getTypesAndUsages(JSONObject obj) throws AbNParseException {

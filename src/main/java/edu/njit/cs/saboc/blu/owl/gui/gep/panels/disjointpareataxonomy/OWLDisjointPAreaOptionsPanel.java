@@ -48,7 +48,7 @@ public class OWLDisjointPAreaOptionsPanel extends NodeOptionsPanel {
                 
         
         CreateTANFromSinglyRootedNodeButton tanBtn = new CreateTANFromSinglyRootedNodeButton(
-                new TANFactory(config.getAbstractionNetwork().getDerivation().getSourceOntology()),
+                new TANFactory(owlAbN.getDataManager().getOntology()),
                 config, 
                 new DisplayTANAction(config.getUIConfiguration().getAbNDisplayManager()));
         
