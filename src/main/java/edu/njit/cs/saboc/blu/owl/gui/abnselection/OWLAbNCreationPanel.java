@@ -75,7 +75,7 @@ public class OWLAbNCreationPanel extends JPanel {
 
         this.add(ontologySelectionPanel, BorderLayout.WEST);
         
-                JPanel centerPanel = new JPanel(new BorderLayout());
+        JPanel centerPanel = new JPanel(new BorderLayout());
                 
         JPanel browserPanel = new JPanel(new BorderLayout());
         browserPanel.add(Box.createHorizontalStrut(10), BorderLayout.CENTER);

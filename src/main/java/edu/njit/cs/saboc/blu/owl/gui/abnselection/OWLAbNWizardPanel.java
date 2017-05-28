@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.owl.gui.abnselection;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan.TANDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.targetbased.TargetAbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;

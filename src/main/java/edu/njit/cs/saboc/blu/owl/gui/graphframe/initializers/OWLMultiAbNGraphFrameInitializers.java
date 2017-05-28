@@ -38,6 +38,7 @@ import edu.njit.cs.saboc.blu.owl.gui.gep.panels.pareataxonomy.configuration.OWLP
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.range.configuration.OWLRangeAbNConfigurationFactory;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.tan.configuration.OWLTANConfigurationFactory;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -61,13 +62,18 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
         this.warningManager = warningManager;
     }
     
-     private DerivationSelectionButton createDerivationSelectionButton(
+    private DerivationSelectionButton createDerivationSelectionButton(
             MultiAbNGraphFrame graphFrame,
             OAFOntologyDataManager dataManager) {
-        
-        OWLAbNWizardPanel wizardPanel = new OWLAbNWizardPanel(new OWLFrameManagerAdapter(graphFrame), false);
-        wizardPanel.setCurrentDataManager(dataManager);
-        wizardPanel.setEnabled(true);
+
+        OWLAbNWizardPanel wizardPanel = new OWLAbNWizardPanel(
+                new OWLFrameManagerAdapter(graphFrame),
+                false);
+
+        SwingUtilities.invokeLater( () -> {
+            wizardPanel.setCurrentDataManager(dataManager);
+            wizardPanel.setEnabled(true);
+        });
         
         return new DerivationSelectionButton(graphFrame, wizardPanel);
     }
