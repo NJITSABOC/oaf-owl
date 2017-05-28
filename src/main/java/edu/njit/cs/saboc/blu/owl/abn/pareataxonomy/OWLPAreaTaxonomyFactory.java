@@ -8,9 +8,11 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.owl.abn.OWLLiveAbNFactory;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import edu.njit.cs.saboc.blu.owl.utils.owlproperties.PropertyTypeAndUsage;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class OWLPAreaTaxonomyFactory extends PAreaTaxonomyFactory {
+public class OWLPAreaTaxonomyFactory extends PAreaTaxonomyFactory implements OWLLiveAbNFactory {
     
     private final OAFOntologyDataManager manager;
 
@@ -35,7 +37,17 @@ public class OWLPAreaTaxonomyFactory extends PAreaTaxonomyFactory {
         this.manager = manager;
         this.propertyTypesAndUsages = propertyTypesAndUsages;
         
-        this.inferredProperties = manager.getOntologyInferredProperties(propertyTypesAndUsages);
+        this.inferredProperties = new HashMap<>();
+        
+        reinitialize();
+    }
+    
+    @Override
+    public final void reinitialize() {
+        this.inferredProperties.clear();
+        
+        this.inferredProperties.putAll(
+                manager.getOntologyInferredProperties(propertyTypesAndUsages));
     }
     
     @Override

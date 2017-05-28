@@ -18,8 +18,8 @@ import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
  */
 public class CreateAndDisplayRangeAbN extends AbNCreateAndDisplayDialog<TargetAbstractionNetwork> {
     
-    private final Hierarchy<OWLConcept> sourceHierarchy;
-    private final Hierarchy<OWLConcept> targetHierarchy;
+    private final OWLConcept sourceHierarchyRoot;
+    private final OWLConcept targetHierarchyRoot;
     
     private final OWLInheritableProperty propertyType;
     
@@ -28,15 +28,15 @@ public class CreateAndDisplayRangeAbN extends AbNCreateAndDisplayDialog<TargetAb
     public CreateAndDisplayRangeAbN(
             String displayText, 
             OWLAbNFrameManager displayListener,
-            Hierarchy<OWLConcept> sourceHierarchy, 
+            OWLConcept sourceHierarchyRoot, 
             OWLInheritableProperty propertyType, 
-            Hierarchy<OWLConcept> targetHierarchy,
+            OWLConcept targetHierarchyRoot,
             OAFOntologyDataManager dataManager) {
         
         super(displayText, displayListener);
         
-        this.sourceHierarchy = sourceHierarchy;
-        this.targetHierarchy = targetHierarchy;
+        this.sourceHierarchyRoot = sourceHierarchyRoot;
+        this.targetHierarchyRoot = targetHierarchyRoot;
         this.propertyType = propertyType;
         this.dataManager = dataManager;
     }
@@ -48,11 +48,15 @@ public class CreateAndDisplayRangeAbN extends AbNCreateAndDisplayDialog<TargetAb
 
     @Override
     protected TargetAbstractionNetwork create() {
+        
         OWLRangeAbstractionNetworkFactory rangeFactory = new OWLRangeAbstractionNetworkFactory(
                 dataManager, 
-                sourceHierarchy, 
+                sourceHierarchyRoot, 
                 propertyType, 
-                targetHierarchy);
+                targetHierarchyRoot);
+        
+        Hierarchy<OWLConcept> sourceHierarchy = dataManager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt(sourceHierarchyRoot);
+        Hierarchy<OWLConcept> targetHierarchy = dataManager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt(targetHierarchyRoot);
         
         TargetAbstractionNetworkGenerator generator = new TargetAbstractionNetworkGenerator();
         

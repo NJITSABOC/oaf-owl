@@ -123,13 +123,15 @@ public class OWLDerivationParser extends AbNDerivationParser {
         if (property.isEmpty()) {
             throw new AbNParseException("Property with specified ID not found.");
         }
-        
-        Hierarchy<OWLConcept> sourceHierarchy = manager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt((OWLConcept)sourceHierarchyRoot);
-        Hierarchy<OWLConcept> targetHierarchy = manager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt((OWLConcept)targetHierarchyRoot);
-        
+
         OWLInheritableProperty owlProperty = (OWLInheritableProperty)property.iterator().next();
         
-        OWLRangeAbstractionNetworkFactory factory = new OWLRangeAbstractionNetworkFactory(manager, sourceHierarchy, owlProperty, targetHierarchy);
+        OWLRangeAbstractionNetworkFactory factory = new OWLRangeAbstractionNetworkFactory(
+                manager, 
+                (OWLConcept)sourceHierarchyRoot, 
+                owlProperty,
+                (OWLConcept)targetHierarchyRoot);
+        
 
         return new TargetAbNDerivation(
                 factory,

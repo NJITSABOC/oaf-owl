@@ -93,13 +93,14 @@ public class OWLAbNWizardPanel extends JPanel {
                 null);        
         
         targetAbNDerivationWizardPanel = new TargetAbNDerivationWizardPanel(dummyRangeConfig,
+                
                 (sourceHierarchy, type, targetHierarchy) -> {
                     CreateAndDisplayRangeAbN createRangeAbN = new CreateAndDisplayRangeAbN(
                        "Creating Range Abstraction Network",
                         frameManager, 
-                            (Hierarchy<OWLConcept>)(Hierarchy<?>)sourceHierarchy,
+                            (OWLConcept)sourceHierarchy.getRoot(),
                             (OWLInheritableProperty)type,
-                            (Hierarchy<OWLConcept>)(Hierarchy<?>)targetHierarchy, 
+                            (OWLConcept)targetHierarchy.getRoot(), 
                             optCurrentDataManager.get()
                     );
                     

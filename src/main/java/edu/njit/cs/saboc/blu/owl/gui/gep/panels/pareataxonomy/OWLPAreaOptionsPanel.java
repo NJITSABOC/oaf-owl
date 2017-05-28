@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.owl.gui.gep.panels.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
@@ -29,7 +28,6 @@ import edu.njit.cs.saboc.blu.owl.gui.listeners.DisplayPAreaTaxonomyAction;
 import edu.njit.cs.saboc.blu.owl.gui.listeners.DisplayTANAction;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
 import edu.njit.cs.saboc.blu.owl.utils.owlproperties.PropertyTypeAndUsage;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -106,6 +104,7 @@ public class OWLPAreaOptionsPanel extends NodeOptionsPanel<PArea> {
             @Override
             protected void createAndDisplayTargetAbN(InheritableProperty property) {
 
+                /*
                 OWLRangeAbstractionNetworkFactory rangeFactory = new OWLRangeAbstractionNetworkFactory(
                         config.getTaxonomy().getDataManager(),
                         (Hierarchy<OWLConcept>) (Hierarchy<?>)this.getCurrentEntity().get().getHierarchy(),
@@ -122,6 +121,7 @@ public class OWLPAreaOptionsPanel extends NodeOptionsPanel<PArea> {
                         (Hierarchy<Concept>) (Hierarchy<?>)config.getTaxonomy().getDataManager().getOntology().getConceptHierarchy());
                 
                 config.getUIConfiguration().getAbNDisplayManager().displayTargetAbstractionNetwork(rangeAbN);
+                */
             }
         };
 

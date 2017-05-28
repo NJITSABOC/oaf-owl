@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.owl.abn.OWLLiveAbNFactory;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
@@ -24,37 +25,58 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class OWLRangeAbstractionNetworkFactory extends TargetAbstractionNetworkFactory {
+public class OWLRangeAbstractionNetworkFactory extends TargetAbstractionNetworkFactory 
+       implements OWLLiveAbNFactory {
 
     private final OAFOntologyDataManager dataManager;
     
     private final Map<Concept, Set<RelationshipTriple>> conceptTriples = new HashMap<>();
     
+    private final OWLConcept sourceHierarchyRoot;
+    private final OWLInheritableProperty propertyType;
+    private final OWLConcept targetHierarchyRoot;
+    
     public OWLRangeAbstractionNetworkFactory(
             OAFOntologyDataManager dataManager, 
-            Hierarchy<OWLConcept> sourceHierarchy,
+            OWLConcept sourceHierarchyRoot,
             OWLInheritableProperty propertyType,
-            Hierarchy<OWLConcept> targetHierarchy) {
+            OWLConcept targetHierarchyRoot) {
         
         super(dataManager.getOntology());
         
         this.dataManager = dataManager;
         
+        this.sourceHierarchyRoot = sourceHierarchyRoot;
+        this.targetHierarchyRoot = targetHierarchyRoot;
+        
+        this.propertyType = propertyType;
+        
+        reinitialize();
+    }
+    
+    @Override
+    public final void reinitialize() {
+        
+        Hierarchy<OWLConcept> sourceHierarchy = dataManager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt(sourceHierarchyRoot);
+        Hierarchy<OWLConcept> targetHierarchy = dataManager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt(targetHierarchyRoot);
+        
         // Precompute triples for OWL ontologies...
-        
+
         Set<RelationshipTriple> triples = dataManager.getSimpleRestrictionTriplesFromHierarchy(
-                sourceHierarchy.getRoot(), 
+                sourceHierarchy,
                 Collections.singleton(propertyType));
-        
-        triples.forEach((triple) -> {
+
+        triples.forEach( (triple) -> {
+            
             OWLConcept sourceConcept = (OWLConcept) triple.getSource();
             OWLConcept targetConcept = (OWLConcept) triple.getTarget();
 
             if (targetHierarchy.contains(targetConcept)) {
+                
                 if (!conceptTriples.containsKey(sourceConcept)) {
                     conceptTriples.put(sourceConcept, new HashSet<>());
                 }
-                
+
                 conceptTriples.get(sourceConcept).add(triple);
             }
         });
