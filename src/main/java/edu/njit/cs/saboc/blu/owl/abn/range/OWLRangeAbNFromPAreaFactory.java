@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.owl.abn.range;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.RelationshipTriple;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkFactory;
@@ -11,6 +12,7 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.owl.abn.OWLLiveAbNFactory;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
@@ -23,29 +25,31 @@ import java.util.Set;
 
 /**
  *
- * @author Chris O
+ * @author Chris Ochs
  */
-public class OWLRangeAbstractionNetworkFactory extends TargetAbstractionNetworkFactory 
+public class OWLRangeAbNFromPAreaFactory extends TargetAbstractionNetworkFactory 
        implements OWLLiveAbNFactory {
 
     private final OAFOntologyDataManager dataManager;
     
     private final Map<Concept, Set<RelationshipTriple>> conceptTriples = new HashMap<>();
     
-    private final OWLConcept sourceHierarchyRoot;
+    private final OWLConcept pareaRoot;
     private final OWLInheritableProperty propertyType;
-    private final OWLConcept targetHierarchyRoot;
     
-    public OWLRangeAbstractionNetworkFactory(
-            OAFOntologyDataManager dataManager, 
-            OWLConcept sourceHierarchyRoot,
-            OWLInheritableProperty propertyType,
-            OWLConcept targetHierarchyRoot) {
+    private final PAreaTaxonomyDerivation sourceDerivation;
+
+    public OWLRangeAbNFromPAreaFactory(
+            PAreaTaxonomyDerivation sourceDerivation,
+            OAFOntologyDataManager dataManager,
+            OWLConcept pareaRoot,
+            OWLInheritableProperty propertyType) {
 
         this.dataManager = dataManager;
+
+        this.sourceDerivation = sourceDerivation;
         
-        this.sourceHierarchyRoot = sourceHierarchyRoot;
-        this.targetHierarchyRoot = targetHierarchyRoot;
+        this.pareaRoot = pareaRoot;
         
         this.propertyType = propertyType;
         
@@ -55,14 +59,27 @@ public class OWLRangeAbstractionNetworkFactory extends TargetAbstractionNetworkF
     @Override
     public final void reinitialize() {
         
-        Hierarchy<OWLConcept> sourceHierarchy = 
-                dataManager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt(sourceHierarchyRoot);
-                
-        Hierarchy<OWLConcept> targetHierarchy = 
-                dataManager.getOntology().getConceptHierarchy().getSubhierarchyRootedAt(targetHierarchyRoot);
+        ((OWLLiveAbNFactory)sourceDerivation.getFactory()).reinitialize();
         
-        // Precompute triples for OWL ontologies...
-
+        PAreaTaxonomy sourceTaxonomy = (PAreaTaxonomy)sourceDerivation.getAbstractionNetwork(
+                (Ontology<Concept>)(Ontology<?>)dataManager.getOntology());
+        
+        Set<PArea> nodes = sourceTaxonomy.getNodesWith(pareaRoot);
+        
+        if(nodes.size() != 1) {
+            // TODO: Error...
+        }
+        
+        PArea node = nodes.iterator().next();
+        
+        if(!node.getRoot().equals(pareaRoot)) {
+            // TODO: Error...
+        }
+        
+        Hierarchy<OWLConcept> sourceHierarchy = (Hierarchy<OWLConcept>)(Hierarchy<?>)node.getHierarchy();
+                
+        Hierarchy<OWLConcept> targetHierarchy = dataManager.getOntology().getConceptHierarchy();
+        
         Set<RelationshipTriple> triples = dataManager.getSimpleRestrictionTriplesFromHierarchy(
                 sourceHierarchy,
                 Collections.singleton(propertyType));
@@ -116,3 +133,5 @@ public class OWLRangeAbstractionNetworkFactory extends TargetAbstractionNetworkF
                         sourcePArea));
     }
 }
+
+

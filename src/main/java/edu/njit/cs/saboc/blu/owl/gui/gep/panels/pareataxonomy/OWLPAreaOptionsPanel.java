@@ -20,7 +20,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons.C
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.owl.abn.OWLAbstractionNetwork;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
-import edu.njit.cs.saboc.blu.owl.abn.range.OWLRangeAbstractionNetworkFactory;
+import edu.njit.cs.saboc.blu.owl.abn.range.OWLRangeAbNFromPAreaFactory;
 import edu.njit.cs.saboc.blu.owl.abn.tan.OWLTANFactory;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.buttons.OWLOpenBrowserButton;
 import edu.njit.cs.saboc.blu.owl.gui.gep.panels.pareataxonomy.configuration.OWLPAreaTaxonomyConfiguration;
@@ -104,12 +104,11 @@ public class OWLPAreaOptionsPanel extends NodeOptionsPanel<PArea> {
             @Override
             protected void createAndDisplayTargetAbN(InheritableProperty property) {
 
-                /*
-                OWLRangeAbstractionNetworkFactory rangeFactory = new OWLRangeAbstractionNetworkFactory(
+                OWLRangeAbNFromPAreaFactory rangeFactory = new OWLRangeAbNFromPAreaFactory(
+                        config.getPAreaTaxonomy().getDerivation(),
                         config.getTaxonomy().getDataManager(),
-                        (Hierarchy<OWLConcept>) (Hierarchy<?>)this.getCurrentEntity().get().getHierarchy(),
-                        (OWLInheritableProperty)property,
-                        config.getTaxonomy().getDataManager().getOntology().getConceptHierarchy());
+                        (OWLConcept)this.getCurrentEntity().get().getRoot(),
+                        (OWLInheritableProperty)property);
 
                 TargetAbstractionNetworkGenerator generator = new TargetAbstractionNetworkGenerator();
 
@@ -121,7 +120,7 @@ public class OWLPAreaOptionsPanel extends NodeOptionsPanel<PArea> {
                         (Hierarchy<Concept>) (Hierarchy<?>)config.getTaxonomy().getDataManager().getOntology().getConceptHierarchy());
                 
                 config.getUIConfiguration().getAbNDisplayManager().displayTargetAbstractionNetwork(rangeAbN);
-                */
+                
             }
         };
 
