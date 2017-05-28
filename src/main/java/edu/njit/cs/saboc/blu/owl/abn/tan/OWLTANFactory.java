@@ -47,12 +47,16 @@ public class OWLTANFactory extends TANFactory {
     }
 
     @Override
-    public <T extends Cluster, V extends PartitionedNode, U extends PartitionedAbstractionNetwork> ClusterTribalAbstractionNetwork createTANFromPartitionedNode(ClusterTribalAbstractionNetwork<T> theTAN, V node, U sourceAbN) {
+    public <T extends Cluster, V extends PartitionedNode, U extends PartitionedAbstractionNetwork> 
+        ClusterTribalAbstractionNetwork createTANFromPartitionedNode(ClusterTribalAbstractionNetwork<T> theTAN, V node, U sourceAbN) {
+            
         return new OWLTANFromPartitionedNode((ClusterTANFromPartitionedNode)super.createTANFromPartitionedNode(theTAN, node, sourceAbN), dataManager);
     }
 
     @Override
-    public <T extends Cluster, V extends SinglyRootedNode, U extends AbstractionNetwork<V>> ClusterTribalAbstractionNetwork createTANFromSinglyRootedNode(ClusterTribalAbstractionNetwork<T> theTAN, V node, U sourceAbN) {
+    public <T extends Cluster, V extends SinglyRootedNode, U extends AbstractionNetwork<V>> 
+        ClusterTribalAbstractionNetwork createTANFromSinglyRootedNode(ClusterTribalAbstractionNetwork<T> theTAN, V node, U sourceAbN) {
+            
         return new OWLTANFromSinglyRootedNode((ClusterTANFromSinglyRootedNode)super.createTANFromSinglyRootedNode(theTAN, node, sourceAbN), dataManager);
     }
     

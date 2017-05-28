@@ -11,6 +11,8 @@ import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 /**
  *
  * @author Chris O
+ * @param <T>
+ * @param <V>
  */
 public class OWLTANFromSinglyRootedNode<T extends SinglyRootedNode,
         V extends AbstractionNetwork<T>> 

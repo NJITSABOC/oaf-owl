@@ -62,7 +62,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
         this.warningManager = warningManager;
     }
     
-    private DerivationSelectionButton createDerivationSelectionButton(
+    protected DerivationSelectionButton createDerivationSelectionButton(
             MultiAbNGraphFrame graphFrame,
             OAFOntologyDataManager dataManager) {
 
@@ -291,9 +291,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     public OAFRecentlyOpenedFileManager getRecentAbNWorkspaceFiles() {
         
         try {
-            
             return dataManager.getOAFStateFileManager().getRecentAbNWorkspaces(dataManager.getOntologyFile());
-            
         } catch (RecentlyOpenedFileException rofe) {
             
         }
@@ -309,5 +307,13 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
     @Override
     public AbNDerivationParser getAbNParser() {
         return new OWLDerivationParser(dataManager);
+    }
+    
+    public AbNWarningManager getWarningManager() {
+        return warningManager;
+    }
+    
+    public OWLAbNFrameManager getFrameManager() {
+        return frameManager;
     }
 }
