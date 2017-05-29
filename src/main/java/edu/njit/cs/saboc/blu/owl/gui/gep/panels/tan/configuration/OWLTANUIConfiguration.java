@@ -18,14 +18,28 @@ public class OWLTANUIConfiguration extends TANUIConfiguration {
 
     private final OWLAbNFrameManager frameManager;
     
+    public OWLTANUIConfiguration(
+            OWLTANConfiguration config, 
+            OWLTANListenerConfiguration listenerConfig,
+            AbNDisplayManager displayListener, 
+            OWLAbNFrameManager frameManager,
+            boolean showingBandTAN) {
+        
+        super(config, displayListener, listenerConfig, showingBandTAN);
+        
+        this.frameManager = frameManager;
+    }
+    
     public OWLTANUIConfiguration(OWLTANConfiguration config, 
             AbNDisplayManager displayListener, 
             OWLAbNFrameManager frameManager,
             boolean showingBandTAN) {
         
-        super(config, displayListener, new OWLTANListenerConfiguration(config), showingBandTAN);
-        
-        this.frameManager = frameManager;
+        this(config, 
+                new OWLTANListenerConfiguration(config), 
+                displayListener, 
+                frameManager, 
+                showingBandTAN);
     }
     
     public OWLAbNFrameManager getFrameManager() {

@@ -21,12 +21,24 @@ public class OWLDisjointTANUIConfiguration extends DisjointTANUIConfiguration {
 
     public OWLDisjointTANUIConfiguration(
             OWLDisjointTANConfiguration config,
+            OWLDisjointTANListenerConfiguration listenerConfig,
             AbNDisplayManager displayListener,
             OWLAbNFrameManager frameManager) {
         
-        super(config, displayListener, new OWLDisjointTANListenerConfiguration(config));
+        super(config, displayListener, listenerConfig);
         
         this.frameManager = frameManager;
+    }
+    
+    public OWLDisjointTANUIConfiguration(
+            OWLDisjointTANConfiguration config,
+            AbNDisplayManager displayListener,
+            OWLAbNFrameManager frameManager) {
+        
+        this(config, 
+                new OWLDisjointTANListenerConfiguration(config), 
+                displayListener, 
+                frameManager);
     }
     
     public OWLAbNFrameManager getFrameManager() {

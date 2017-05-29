@@ -19,12 +19,24 @@ public class OWLDisjointPAreaTaxonomyUIConfiguration extends DisjointPAreaTaxono
     
     public OWLDisjointPAreaTaxonomyUIConfiguration(
             OWLDisjointPAreaTaxonomyConfiguration config, 
+            OWLDisjointPAreaTaxonomyListenerConfiguration listenerConfig,
             AbNDisplayManager displayListener,
             OWLAbNFrameManager frameManager) {
         
-        super(config, displayListener, new OWLDisjointPAreaTaxonomyListenerConfiguration(config));
+        super(config, displayListener, listenerConfig);
         
         this.frameManager = frameManager;
+    }
+    
+    public OWLDisjointPAreaTaxonomyUIConfiguration(
+            OWLDisjointPAreaTaxonomyConfiguration config, 
+            AbNDisplayManager displayListener,
+            OWLAbNFrameManager frameManager) {
+        
+        this(config, 
+                new OWLDisjointPAreaTaxonomyListenerConfiguration(config), 
+                displayListener, 
+                frameManager);
     }
     
     public OWLAbNFrameManager getFrameManager() {
