@@ -20,8 +20,10 @@ public class OWLFrameManagerAdapter extends OWLAbNFrameManager {
 
     private final MultiAbNGraphFrame frame;
 
-    public OWLFrameManagerAdapter(MultiAbNGraphFrame frame) {
-        super(null, null);
+    public OWLFrameManagerAdapter(
+            MultiAbNGraphFrame frame) {
+        
+        super(null, null, null);
 
         this.frame = frame;
     }

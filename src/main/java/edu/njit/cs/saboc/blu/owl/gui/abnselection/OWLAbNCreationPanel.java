@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.gui.abnselection;
 
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OntologyManagementPanel.OntologyManagementListener;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLNAT;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
@@ -18,7 +19,9 @@ import javax.swing.JPanel;
  */
 public class OWLAbNCreationPanel extends JPanel {
     
-    private final BLUOntologyManager manager = new BLUOntologyManager();
+    private final OAFStateFileManager stateFileManager = new OAFStateFileManager("BLUOWL");
+    
+    private final BLUOntologyManager ontologyManager;
     
     private final OntologyManagementPanel ontologySelectionPanel;
 
@@ -29,13 +32,16 @@ public class OWLAbNCreationPanel extends JPanel {
     private JButton openBrowserBtn;
 
     public OWLAbNCreationPanel(OWLAbNFrameManager frameManager) {
+        
         super(new BorderLayout());
         
         this.frameManager = frameManager;
         
-        ontologySelectionPanel = new OntologyManagementPanel(manager);
+        this.ontologyManager = new BLUOntologyManager(stateFileManager);
         
-        wizardPanel = new OWLAbNWizardPanel(frameManager, true);
+        ontologySelectionPanel = new OntologyManagementPanel(ontologyManager);
+        
+        wizardPanel = new OWLAbNWizardPanel(stateFileManager, frameManager, true);
         wizardPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
         
         ontologySelectionPanel.addOntologySelectionListener(new OntologyManagementListener() {

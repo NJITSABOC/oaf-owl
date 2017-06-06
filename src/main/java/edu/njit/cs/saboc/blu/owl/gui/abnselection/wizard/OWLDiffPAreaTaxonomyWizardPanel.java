@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.abn.OWLAbstractionNetwork;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.BLUOntologyManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OWLAbNFrameManager;
@@ -36,12 +37,16 @@ public class OWLDiffPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel im
     
     private Optional<OAFOntologyDataManager> optCurrentOntologyDataManager = Optional.empty();
     
-    public OWLDiffPAreaTaxonomyWizardPanel(OWLAbNFrameManager displayFrameListener) {
+    public OWLDiffPAreaTaxonomyWizardPanel(
+            OAFStateFileManager stateFileManager,
+            OWLAbNFrameManager displayFrameListener) {
+        
         this.displayFrameListener = displayFrameListener;
         
-        this.fromOntologySelectionPanel = new DiffOntologySelectionPanel("From");
+        this.fromOntologySelectionPanel = new DiffOntologySelectionPanel(stateFileManager, "From");
         
-        this.taxonomyDerivationPanel = new OWLPAreaTaxonomyWizardPanel((dataManager, root, typesAndUsages, availableProperties, selectedProperties) -> {
+        this.taxonomyDerivationPanel = new OWLPAreaTaxonomyWizardPanel(
+                (dataManager, root, typesAndUsages, availableProperties, selectedProperties) -> {
                     CreateAndDisplayOWLDiffPAreaTaxonomy createAndDisplay = new CreateAndDisplayOWLDiffPAreaTaxonomy(
                         "Creating Diff Partial-area Taxonomy",
                         root,
@@ -116,7 +121,7 @@ class DiffOntologySelectionPanel extends AbNDerivationWizardPanel implements OWL
     
     private Optional<OAFOntologyDataManager> optCurrentToOntology = Optional.empty(); 
     
-    private final BLUOntologyManager manager = new BLUOntologyManager();
+    private final BLUOntologyManager manager;
     
     private Optional<OAFOntologyDataManager> optSelectedFromOntology = Optional.empty();
     
@@ -126,7 +131,9 @@ class DiffOntologySelectionPanel extends AbNDerivationWizardPanel implements OWL
     
     private final ArrayList<OntologySelectedListener> ontologySelectedListeners = new ArrayList<>();
     
-    public DiffOntologySelectionPanel(String type) {
+    public DiffOntologySelectionPanel(OAFStateFileManager stateFileManager, String type) {
+        
+        this.manager = new BLUOntologyManager(stateFileManager);
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
         

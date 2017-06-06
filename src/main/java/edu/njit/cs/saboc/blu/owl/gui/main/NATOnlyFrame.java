@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.gui.main;
 
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.BLUOntologyManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OntologyManagementPanel;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OntologyManagementPanel.OntologyManagementListener;
@@ -25,18 +26,28 @@ import javax.swing.JPanel;
 public class NATOnlyFrame extends JFrame {
     
     private final BLUOntologyManager ontologyManager;
+    
     private final OntologyManagementPanel managementPanel;
     
     private final NATBrowserPanel<OWLConcept> browserPanel;
     
     private final Map<File, NATWorkspace> workspaces;
     
+    private final OAFStateFileManager stateFileManager;
+    
     public NATOnlyFrame() {
 
-        this.ontologyManager = new BLUOntologyManager();
+        this.stateFileManager = new OAFStateFileManager("BLUOWL");
+        
+        this.ontologyManager = new BLUOntologyManager(stateFileManager);
         this.managementPanel = new OntologyManagementPanel(ontologyManager);
 
-        this.browserPanel = new NATBrowserPanel<>(this, new OWLNATLayout());
+        this.browserPanel = new NATBrowserPanel<>(
+                this, 
+                stateFileManager,
+                new OWLNATLayout());
+        
+        
         this.browserPanel.setEnabled(false);
         
         this.workspaces = new HashMap<>();

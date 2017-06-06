@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.owl.gui.abnselection;
 
-import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 import java.io.File;
@@ -26,15 +25,10 @@ public class BLUOntologyManager {
     
     private final ArrayList<OAFOntologyDataManager> openOntologies = new ArrayList<>();
     
-    private OAFStateFileManager stateFileManager;
+    private final OAFStateFileManager stateFileManager;
 
-    public BLUOntologyManager() {
-        
-        try {
-            this.stateFileManager = new OAFStateFileManager("BLUOWL");
-        } catch(RecentlyOpenedFileException rofe) {
-            this.stateFileManager = null;
-        }
+    public BLUOntologyManager(OAFStateFileManager stateFileManager) {
+        this.stateFileManager = stateFileManager;
     }
     
     public class FailedToOpenOntologyException extends Exception {

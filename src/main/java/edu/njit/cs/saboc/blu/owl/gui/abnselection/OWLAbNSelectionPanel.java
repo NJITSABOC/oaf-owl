@@ -13,6 +13,8 @@ public class OWLAbNSelectionPanel extends JPanel {
         
         super(new BorderLayout());
 
-        this.add(new OWLAbNCreationPanel(displayFrameListener), BorderLayout.CENTER);
+        this.add(
+                new OWLAbNCreationPanel(displayFrameListener), 
+                BorderLayout.CENTER);
     }
 }

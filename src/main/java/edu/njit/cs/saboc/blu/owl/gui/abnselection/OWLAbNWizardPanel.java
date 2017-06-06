@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.owl.gui.abnselection;
 
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan.TANDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.targetbased.TargetAbNDerivationWizardPanel;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLTAN;
@@ -44,7 +45,10 @@ public class OWLAbNWizardPanel extends JPanel {
     
     private final OWLAbNFrameManager frameManager;
     
-    public OWLAbNWizardPanel(OWLAbNFrameManager frameManager, boolean includeDiff) {
+    public OWLAbNWizardPanel(
+            OAFStateFileManager stateFileManager,
+            OWLAbNFrameManager frameManager, 
+            boolean includeDiff) {
         
         this.frameManager = frameManager;
         
@@ -65,7 +69,9 @@ public class OWLAbNWizardPanel extends JPanel {
                 },
                 frameManager);
         
-        diffPAreaTaxonomyWizardPanel = new OWLDiffPAreaTaxonomyWizardPanel(frameManager);
+        diffPAreaTaxonomyWizardPanel = new OWLDiffPAreaTaxonomyWizardPanel(
+                stateFileManager, 
+                frameManager);
         
         OWLTANConfigurationFactory tanConfigFactory = new OWLTANConfigurationFactory();
         

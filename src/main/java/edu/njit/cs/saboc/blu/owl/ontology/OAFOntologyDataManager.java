@@ -46,7 +46,8 @@ import uk.ac.manchester.cs.owl.owlapi.OWLQuantifiedObjectRestrictionImpl;
 public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     
     private final String ontologyFileName;
-    private final File ontologyFile;
+    
+    private File ontologyFile;
     
     private final OWLOntologyManager manager;
     
@@ -173,6 +174,10 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     
     public File getOntologyFile() {
         return ontologyFile;
+    }
+
+    public final void setOntologyFile(File file) {
+        this.ontologyFile = file;
     }
     
     public OWLOntologyManager getManager() {
