@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateAncestorSubTAN;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateCluster;
@@ -36,10 +37,10 @@ public class OWLAggregateAncestorSubTAN extends AggregateAncestorSubTAN implemen
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
         ClusterTribalAbstractionNetwork tan = AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(
                 this.getNonAggregateSourceAbN(), 
-                smallestNode);
+                new AggregatedProperty(smallestNode, isWeighteAggregated));
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(dataManager, (AggregateClusterTribalAbstractionNetwork)tan);

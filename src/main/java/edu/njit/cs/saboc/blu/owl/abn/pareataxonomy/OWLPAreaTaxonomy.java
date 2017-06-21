@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.aggregate.OWLAggregatePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AncestorSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
@@ -89,8 +90,8 @@ public class OWLPAreaTaxonomy<T extends PArea> extends PAreaTaxonomy<T> implemen
     }
 
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, smallestNode);
+    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, new AggregatedProperty(smallestNode, isWeighteAggregated));
     }
 
     @Override

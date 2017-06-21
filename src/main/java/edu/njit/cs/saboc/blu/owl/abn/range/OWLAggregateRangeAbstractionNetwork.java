@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.owl.abn.range;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateAncestorTargetAbN;
@@ -18,9 +19,9 @@ public class OWLAggregateRangeAbstractionNetwork extends AggregateTargetAbN impl
      public static final TargetAbstractionNetwork createAggregatedOWLRangeAbN(
             TargetAbstractionNetwork sourceAbN, 
             OWLAbstractionNetwork owlAbN, 
-            int minBound) {
+            AggregatedProperty aggregatedProperty) {
         
-        TargetAbstractionNetwork baseAggregate = AggregateTargetAbN.createAggregated(sourceAbN, minBound);
+        TargetAbstractionNetwork baseAggregate = AggregateTargetAbN.createAggregated(sourceAbN, aggregatedProperty);
         
         if(baseAggregate.isAggregated()) {
             return new OWLAggregateRangeAbstractionNetwork((AggregateTargetAbN)baseAggregate, owlAbN.getDataManager());
@@ -43,8 +44,8 @@ public class OWLAggregateRangeAbstractionNetwork extends AggregateTargetAbN impl
     }
 
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(this.getNonAggregateSourceAbN(), this, smallestNode);
+    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
+        return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(this.getNonAggregateSourceAbN(), this, new AggregatedProperty(smallestNode, isWeighteAggregated));
     }
 
     @Override

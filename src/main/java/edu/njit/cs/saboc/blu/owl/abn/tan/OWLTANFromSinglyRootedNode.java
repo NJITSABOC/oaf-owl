@@ -38,9 +38,9 @@ public class OWLTANFromSinglyRootedNode<T extends SinglyRootedNode,
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
         
-        ClusterTribalAbstractionNetwork tan = super.getAggregated(smallestNode);
+        ClusterTribalAbstractionNetwork tan = super.getAggregated(smallestNode, isWeighteAggregated);
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(this.getDataManager(), (AggregateClusterTribalAbstractionNetwork)tan);
