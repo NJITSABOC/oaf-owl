@@ -34,9 +34,12 @@ public class OWLUtilities {
             String clsIri = cls.getIRI().toString();
 
             if (clsIri.contains("#")) {
-                return clsIri.substring(clsIri.lastIndexOf("#") + 1);
+                clsIri = clsIri.substring(clsIri.lastIndexOf("#") + 1);
+            } else {
+                clsIri = clsIri.substring(clsIri.lastIndexOf("/") + 1);
             }
-            return clsIri.substring(clsIri.lastIndexOf("/") + 1);
+            
+            return clsIri.replaceAll("_", " ");
         }
     }
     

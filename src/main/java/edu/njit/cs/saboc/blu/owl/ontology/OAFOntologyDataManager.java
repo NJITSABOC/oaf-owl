@@ -797,7 +797,7 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
             }
         }
 
-        return false;
+        return concept.getName().equalsIgnoreCase(str);
     }
     
     private boolean labelStartsWith(OWLConcept concept, String str) {
@@ -820,8 +820,8 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
                 }
             }
         }
-
-        return false;
+        
+        return concept.getName().toLowerCase().startsWith(str);
     }
 
     private boolean labelContains(OWLConcept concept, String str) {
@@ -843,11 +843,12 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
             }
         }
 
-        return false;
+        return concept.getName().toLowerCase().contains(str);
     }
     
     private Set<OWLConcept> doSearch(Predicate<OWLConcept> filter) {
-        Set<OWLConcept> result = oafOntology.getConceptHierarchy().getNodes().stream().filter(filter).collect(Collectors.toSet());
+        Set<OWLConcept> result = oafOntology.getConceptHierarchy().getNodes().
+                stream().filter(filter).collect(Collectors.toSet());
         
         return result;
     }
