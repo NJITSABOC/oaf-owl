@@ -1,9 +1,10 @@
 package edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.diffpareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
-import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLTaxonomy;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 import edu.njit.cs.saboc.blu.owl.utils.owlproperties.PropertyTypeAndUsage;
 import java.util.Set;
@@ -16,21 +17,19 @@ public class OWLDiffPAreaTaxonomy extends DiffPAreaTaxonomy {
     
     public OWLDiffPAreaTaxonomy(
             OWLDiffAreaTaxonomy areaTaxonomy,
-            OWLPAreaTaxonomy fromTaxonomy,
-            OWLPAreaTaxonomy toTaxonomy,
+            PAreaTaxonomy fromTaxonomy,
+            PAreaTaxonomy toTaxonomy,
             Hierarchy<DiffPArea> pareaHierarchy) {
         
         super(areaTaxonomy, fromTaxonomy, toTaxonomy, pareaHierarchy);
     }
 
-    @Override
-    public OWLPAreaTaxonomy getTo() {
-        return (OWLPAreaTaxonomy)super.getTo();
+    public OWLTaxonomy getToOWLTaxonomy() {
+        return (OWLTaxonomy)super.getTo();
     }
 
-    @Override
-    public OWLPAreaTaxonomy getFrom() {
-        return (OWLPAreaTaxonomy)super.getFrom();
+    public OWLTaxonomy getFromOWLTaxonomy() {
+        return (OWLTaxonomy)super.getFrom();
     }
 
     @Override
@@ -39,18 +38,18 @@ public class OWLDiffPAreaTaxonomy extends DiffPAreaTaxonomy {
     }
     
     public OAFOntologyDataManager getFromDataManager() {
-        return getFrom().getDataManager();
+        return getFromOWLTaxonomy().getDataManager();
     }
     
     public OAFOntologyDataManager getToDataManager() {
-        return getTo().getDataManager();
+        return getToOWLTaxonomy().getDataManager();
     }
 
     public Set<PropertyTypeAndUsage> getFromTypesAndUsages() {
-        return getFrom().getPropertyTypesAndUsages();
+        return getFromOWLTaxonomy().getPropertyTypesAndUsages();
     }
     
     public Set<PropertyTypeAndUsage> getToTypesAndUsages() {
-        return getTo().getPropertyTypesAndUsages();
+        return getToOWLTaxonomy().getPropertyTypesAndUsages();
     }
 }

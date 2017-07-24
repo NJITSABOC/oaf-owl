@@ -36,8 +36,8 @@ public class OWLDiffPAreaTaxonomyFactory extends DiffPAreaTaxonomyFactory {
         
         OWLDiffAreaTaxonomy diffAreaTaxonomy = (OWLDiffAreaTaxonomy)areaTaxonomy;
         
-        OWLPAreaTaxonomy fromTaxonomy = (OWLPAreaTaxonomy)fromSourceTaxonomy;
-        OWLPAreaTaxonomy toTaxonomy = (OWLPAreaTaxonomy)toSourceTaxonomy;
+        PAreaTaxonomy fromTaxonomy = fromSourceTaxonomy;
+        PAreaTaxonomy toTaxonomy = toSourceTaxonomy;
         
         return new OWLDiffPAreaTaxonomy(diffAreaTaxonomy, fromTaxonomy, toTaxonomy, pareaHierarchy);
     }
