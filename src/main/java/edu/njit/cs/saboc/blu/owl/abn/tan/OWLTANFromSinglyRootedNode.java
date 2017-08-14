@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.owl.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTANFromSinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
@@ -38,9 +39,9 @@ public class OWLTANFromSinglyRootedNode<T extends SinglyRootedNode,
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
+    public ClusterTribalAbstractionNetwork getAggregated(AggregatedProperty ap) {
         
-        ClusterTribalAbstractionNetwork tan = super.getAggregated(smallestNode, isWeighteAggregated);
+        ClusterTribalAbstractionNetwork tan = super.getAggregated(ap);
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(this.getDataManager(), (AggregateClusterTribalAbstractionNetwork)tan);

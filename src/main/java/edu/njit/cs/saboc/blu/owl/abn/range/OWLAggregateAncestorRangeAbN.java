@@ -27,11 +27,11 @@ public class OWLAggregateAncestorRangeAbN extends AggregateAncestorTargetAbN imp
     }
 
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
+    public TargetAbstractionNetwork getAggregated(AggregatedProperty ap) {
         return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(
                 this.getNonAggregateSourceAbN(),
                 this, 
-                new AggregatedProperty(smallestNode,isWeighteAggregated)
+                ap
                 );
     }
     

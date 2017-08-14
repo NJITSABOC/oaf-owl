@@ -71,8 +71,8 @@ public class OWLAggregatePAreaTaxonomy extends AggregatePAreaTaxonomy implements
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, new AggregatedProperty(smallestNode, isWeighteAggregated));
+    public PAreaTaxonomy getAggregated(AggregatedProperty ap) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this.getNonAggregateSourceAbN(), this, ap);
     }
 
     @Override

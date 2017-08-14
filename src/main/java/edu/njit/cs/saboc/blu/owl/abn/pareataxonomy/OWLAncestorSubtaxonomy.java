@@ -45,8 +45,8 @@ public class OWLAncestorSubtaxonomy extends AncestorSubtaxonomy implements OWLTa
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, new AggregatedProperty(smallestNode, isWeighteAggregated));
+    public PAreaTaxonomy getAggregated(AggregatedProperty ap) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, ap);
     }
 
     @Override

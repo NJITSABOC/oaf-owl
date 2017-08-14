@@ -37,11 +37,10 @@ public class OWLAggregateRootSubTAN extends AggregateRootSubTAN implements OWLAb
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
+    public ClusterTribalAbstractionNetwork getAggregated(AggregatedProperty ap) {
         ClusterTribalAbstractionNetwork tan = AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(
                 this.getNonAggregateSourceAbN(), 
-                new AggregatedProperty(smallestNode,
-                isWeighteAggregated));
+                ap);
         
         if(tan.isAggregated()) {
             return new OWLAggregateClusterTAN(dataManager, (AggregateClusterTribalAbstractionNetwork)tan);

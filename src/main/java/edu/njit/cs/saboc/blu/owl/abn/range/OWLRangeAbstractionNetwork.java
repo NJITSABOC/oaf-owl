@@ -23,8 +23,8 @@ public class OWLRangeAbstractionNetwork extends TargetAbstractionNetwork<TargetG
     }
 
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeighteAggregated) {
-        return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(this, this, new AggregatedProperty(smallestNode, isWeighteAggregated));
+    public TargetAbstractionNetwork getAggregated(AggregatedProperty ap) {
+        return OWLAggregateRangeAbstractionNetwork.createAggregatedOWLRangeAbN(this, this, ap);
     }
     
     @Override

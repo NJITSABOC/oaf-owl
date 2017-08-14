@@ -46,8 +46,8 @@ public class OWLRelationshipSubtaxonomy<T extends PArea> extends RelationshipSub
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode, boolean isWeighteAggregated) {
-        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, new AggregatedProperty(smallestNode, isWeighteAggregated));
+    public PAreaTaxonomy getAggregated(AggregatedProperty ap) {
+        return OWLAggregatePAreaTaxonomy.createAggregatedOWLPAreaTaxonomy(this, this, ap);
     }
 
     @Override
