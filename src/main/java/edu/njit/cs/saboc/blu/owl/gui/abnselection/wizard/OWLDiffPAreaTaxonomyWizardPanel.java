@@ -46,7 +46,9 @@ public class OWLDiffPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel im
         this.fromOntologySelectionPanel = new DiffOntologySelectionPanel(stateFileManager, "From");
         
         this.taxonomyDerivationPanel = new OWLPAreaTaxonomyWizardPanel(
+                
                 (dataManager, root, typesAndUsages, availableProperties, selectedProperties) -> {
+                    
                     CreateAndDisplayOWLDiffPAreaTaxonomy createAndDisplay = new CreateAndDisplayOWLDiffPAreaTaxonomy(
                         "Creating Diff Partial-area Taxonomy",
                         root,
@@ -60,10 +62,14 @@ public class OWLDiffPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel im
                     createAndDisplay.run();
                 },
                 displayFrameListener);
+        
         this.taxonomyDerivationPanel.setDerivationButtonText("Derive Diff Partial-area Taxonomy");
         
         this.fromOntologySelectionPanel.addOntologySelectedListener( (ontology) -> {
-            this.taxonomyDerivationPanel.initialize(ontology);
+            
+            OAFOntologyDataManager toOntology = optCurrentOntologyDataManager.get();
+            
+            this.taxonomyDerivationPanel.initialize(toOntology);
             
             this.taxonomyDerivationPanel.setEnabled(true);
         });
@@ -251,6 +257,5 @@ class DiffOntologySelectionPanel extends AbNDerivationWizardPanel implements OWL
         Set<OWLConcept> fromConcepts = to.getOntology().getConceptHierarchy().getNodes();
 
         return !SetUtilities.getSetIntersection(toConcepts, fromConcepts).isEmpty();
-
     }
 }
