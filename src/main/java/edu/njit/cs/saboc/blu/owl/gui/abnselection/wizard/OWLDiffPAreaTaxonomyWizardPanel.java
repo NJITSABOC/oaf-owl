@@ -4,16 +4,20 @@ import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import edu.njit.cs.saboc.blu.owl.abn.OWLAbstractionNetwork;
+import edu.njit.cs.saboc.blu.owl.abn.pareataxonomy.OWLInheritableProperty;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.BLUOntologyManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OWLAbNFrameManager;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.OWLFileFilter;
 import edu.njit.cs.saboc.blu.owl.gui.abnselection.createanddisplay.CreateAndDisplayOWLDiffPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.owl.gui.abnselection.wizard.OWLPAreaTaxonomyWizardPanel.OWLPAreaTaxonomyDerivationAction;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
 import edu.njit.cs.saboc.blu.owl.ontology.OWLConcept;
+import edu.njit.cs.saboc.blu.owl.utils.owlproperties.PropertyTypeAndUsage;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -45,9 +49,12 @@ public class OWLDiffPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel im
         
         this.fromOntologySelectionPanel = new DiffOntologySelectionPanel(stateFileManager, "From");
         
-        this.taxonomyDerivationPanel = new OWLPAreaTaxonomyWizardPanel(
-                
-                (dataManager, root, typesAndUsages, availableProperties, selectedProperties) -> {
+        OWLPAreaTaxonomyDerivationAction action = (
+                dataManager, 
+                root, 
+                typesAndUsages, 
+                availableProperties, 
+                selectedProperties) -> {
                     
                     CreateAndDisplayOWLDiffPAreaTaxonomy createAndDisplay = new CreateAndDisplayOWLDiffPAreaTaxonomy(
                         "Creating Diff Partial-area Taxonomy",
@@ -60,8 +67,31 @@ public class OWLDiffPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel im
                         optCurrentOntologyDataManager.get());
                     
                     createAndDisplay.run();
-                },
-                displayFrameListener);
+                };
+        
+        this.taxonomyDerivationPanel = new OWLPAreaTaxonomyWizardPanel(
+                action,
+                displayFrameListener) {
+                    
+            @Override
+            public Set<OWLInheritableProperty> getAvailableProperties(OWLConcept root, Set<PropertyTypeAndUsage> typesAndUsages) {
+                
+                if(optCurrentOntologyDataManager.isPresent() && 
+                        fromOntologySelectionPanel.getSelectedOntologyDataManager().isPresent()) {
+   
+                    OAFOntologyDataManager fromManager = fromOntologySelectionPanel.getSelectedOntologyDataManager().get();
+                    OAFOntologyDataManager toManager = optCurrentOntologyDataManager.get();
+                    
+                    Set<OWLInheritableProperty> fromProperties = fromManager.getPropertiesInSubhierarchy(root, typesAndUsages);
+                    Set<OWLInheritableProperty> toProperties = toManager.getPropertiesInSubhierarchy(root, typesAndUsages);
+                    
+                    return SetUtilities.getSetUnion(fromProperties, toProperties);
+
+                } else {
+                    return Collections.emptySet();
+                }
+            }
+        };
         
         this.taxonomyDerivationPanel.setDerivationButtonText("Derive Diff Partial-area Taxonomy");
         
@@ -84,6 +114,7 @@ public class OWLDiffPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel im
         this.add(taxonomyDerivationPanel, BorderLayout.CENTER);
     }
     
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
         
