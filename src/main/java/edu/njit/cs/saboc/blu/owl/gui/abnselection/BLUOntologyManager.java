@@ -65,13 +65,7 @@ public class BLUOntologyManager {
             loader.initialize();
             
             openOntologies.add(loader);
-            
-            try {
-                OAFInferredOntologyDataManager inferredManager = loader.getInferredOntologyDataManager();
-            } catch(OAFOntologyReasoningException e) {
-                e.printStackTrace();
-            }
- 
+             
             return loader;
             
         } catch (OWLOntologyCreationIOException e) {
