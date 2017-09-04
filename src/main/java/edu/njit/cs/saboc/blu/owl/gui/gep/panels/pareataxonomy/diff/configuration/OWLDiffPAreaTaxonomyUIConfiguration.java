@@ -39,16 +39,6 @@ public class OWLDiffPAreaTaxonomyUIConfiguration extends DiffPAreaTaxonomyUIConf
     }
 
     @Override
-    public NodeOptionsPanel getPartitionedNodeOptionsPanel() {
-        return new NodeOptionsPanel();
-    }
-
-    @Override
-    public NodeOptionsPanel getNodeOptionsPanel() {
-        return new NodeOptionsPanel();
-    }
-
-    @Override
     public ConceptPainter getConceptHierarchyPainter() {
         return new ConceptPainter();
     }
