@@ -283,6 +283,13 @@ public class OntologyManagementPanel extends JPanel {
                         ontologyManager.loadOntology(filePath);
                         ontologyListModel.addElement(file.getName());
                     } catch(BLUOntologyManager.FailedToOpenOntologyException e) {
+                        
+                        JOptionPane.showMessageDialog(
+                                null, 
+                                "An error occured while automatically opening " + file.getName(), 
+                                "Error Automatically Opening Ontology", 
+                                JOptionPane.ERROR_MESSAGE);
+                        
                         e.printStackTrace();
                     }
                 }
@@ -404,6 +411,13 @@ public class OntologyManagementPanel extends JPanel {
                     loadProgressBar.setVisible(false);
                 });
             } catch (BLUOntologyManager.FailedToOpenOntologyException e) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "An error occured while opening " + file.getName(),
+                        "Error Opening Ontology",
+                        JOptionPane.ERROR_MESSAGE);
+
                 e.printStackTrace();
             }
         });

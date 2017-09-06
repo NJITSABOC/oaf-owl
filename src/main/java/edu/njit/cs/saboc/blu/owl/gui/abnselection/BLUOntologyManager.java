@@ -1,7 +1,9 @@
 package edu.njit.cs.saboc.blu.owl.gui.abnselection;
 
 import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
+import edu.njit.cs.saboc.blu.owl.ontology.OAFInferredOntologyDataManager;
 import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyDataManager;
+import edu.njit.cs.saboc.blu.owl.ontology.OAFOntologyReasoningException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
@@ -60,8 +62,10 @@ public class BLUOntologyManager {
                     fileName, 
                     ontology);
             
-            openOntologies.add(loader);
+            loader.initialize();
             
+            openOntologies.add(loader);
+             
             return loader;
             
         } catch (OWLOntologyCreationIOException e) {

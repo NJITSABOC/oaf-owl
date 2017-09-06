@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -206,10 +207,12 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
         displayLoadingData();
 
         Thread loaderThread = new Thread(() -> {
+            
             if (optDataManager.isPresent()) {
                 Set<PropertyTypeAndUsage> typesAndUsages = optDataManager.get().getAvailablePropertyTypesInSubhierarchy(root);
                 
-                ArrayList<InheritableProperty> sortedProperties = new ArrayList<>(optDataManager.get().getPropertiesInSubhierarchy(root, typesAndUsages));
+                ArrayList<InheritableProperty> sortedProperties = new ArrayList<>(
+                        getAvailableProperties(root, typesAndUsages));
 
                 sortedProperties.sort((a, b) -> {
                     return a.getName().compareToIgnoreCase(b.getName());
@@ -244,9 +247,10 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
         displayLoadingData();
 
         Thread loaderThread = new Thread(() -> {
+            
             if (optDataManager.isPresent()) {
                 ArrayList<InheritableProperty> sortedProperties = new ArrayList<>(
-                        optDataManager.get().getPropertiesInSubhierarchy(root, typesAndUsages));
+                        getAvailableProperties(root, typesAndUsages));
 
                 sortedProperties.sort((a, b) -> {
                     return a.getName().compareToIgnoreCase(b.getName());
@@ -260,9 +264,21 @@ public class OWLPAreaTaxonomyWizardPanel extends AbNDerivationWizardPanel implem
                     displayStatus();
                 });
             }
+            
         });
         
         loaderThread.start();
+    }
+    
+    public Set<OWLInheritableProperty> getAvailableProperties(
+            OWLConcept root, 
+            Set<PropertyTypeAndUsage> typesAndUsages) {
+        
+        if (optDataManager.isPresent()) {
+            return optDataManager.get().getPropertiesInSubhierarchy(root, typesAndUsages);
+        } else {
+            return Collections.emptySet();
+        }
     }
     
     private void displayLoadingData() {

@@ -57,11 +57,9 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     
     private OWLBrowserDataSource browserDataSource;
     
-    private Set<OWLConcept> ontologyRoots;
-    
     private OAFOWLOntology oafOntology;
     
-    private OntologyMetrics metrics;
+    private OAFInferredOntologyDataManager inferredManager = null;
     
     public OAFOntologyDataManager(
             OAFStateFileManager stateFileManager,
@@ -76,16 +74,29 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         this.sourceOntology = ontology;
         this.ontologyFileName = ontologyName;
         this.ontologyFile = ontologyFile;
-        
-        reinitialize();
     }
     
-    public final void reinitialize() {
+    public final void initialize() {
+        
         setOAFOntology(createOAFOntology());
-        
-        initializeOntologyMetrics();
-        
+                
         this.browserDataSource = new OWLBrowserDataSource(this);
+        
+    }
+    
+    // Get a version of this manager based on the inferred hierarchy of the ontology
+    public OAFInferredOntologyDataManager getInferredOntologyDataManager() throws OAFOntologyReasoningException {
+        
+        if(inferredManager == null) {
+            inferredManager = new OAFInferredOntologyDataManager(this);
+            inferredManager.initialize();
+        }
+        
+        if(!inferredManager.isInitialized()) {
+            throw new OAFOntologyReasoningException("Ontology did not reason properly...");
+        }
+        
+        return inferredManager;
     }
     
     protected OAFOWLOntology createOAFOntology() {
@@ -98,7 +109,7 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
 
         Set<OWLClass> clses = sourceOntology.getClassesInSignature(true);
 
-        clses.forEach((cls) -> {
+        clses.forEach( (cls) -> {
             conceptMap.put(cls, new OWLConcept(cls, this));
         });
 
@@ -118,8 +129,6 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
                 }
             }
         });
-
-        this.ontologyRoots = currentOntologyRoots;
 
         currentOntologyRoots.forEach((concept) -> {
             conceptHierarchy.addEdge(concept, conceptHierarchy.getRoot());
@@ -168,10 +177,6 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         return new OAFOWLOntology(conceptHierarchy, this);
     }
     
-    public Set<OWLConcept> getOntologyRoots() {
-        return ontologyRoots;
-    }
-    
     public File getOntologyFile() {
         return ontologyFile;
     }
@@ -209,14 +214,18 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
     }
     
     public boolean allClassesHaveDefinedSuperclass() {
+        
         Set<OWLClass> clses = sourceOntology.getClassesInSignature();
         
+        SimpleRootClassChecker checker = new SimpleRootClassChecker(Collections.singleton(sourceOntology));
+        
         for (OWLClass cls : clses) {
+            
             if (OWLUtilities.classIsObsolete(sourceOntology, cls) || cls.isOWLNothing() || cls.isOWLThing()) {
                 continue;
             }
             
-            if(this.ontologyRoots.contains(this.getOntology().getOWLConceptFor(cls))){
+            if(checker.isRootClass(cls)) {
                 continue;
             }
 
@@ -241,109 +250,6 @@ public class OAFOntologyDataManager implements OntologySearcher<OWLConcept> {
         }
         
         return true;
-    }
-    
-    private void initializeOntologyMetrics() {
-        OntologyMetrics currentMetrics = new OntologyMetrics();
-        
-        currentMetrics.hierarchyCount = ontologyRoots.size();
-        
-        Set<OWLConcept> classes = this.getOntology().getConceptHierarchy().getNodes();
-        
-        currentMetrics.totalNumberOfClasses = classes.size();
-        
-        Set<OWLObjectProperty> allRestrictionOPs = new HashSet<>();
-        Set<OWLDataProperty> allRestrictionDPs = new HashSet<>();
-        
-        Set<OWLObjectProperty> allEquivOPs = new HashSet<>();
-        Set<OWLDataProperty> allEquivDPs = new HashSet<>();
-        
-        Set<OWLConcept> uniqueOPRestrictionDomains = new HashSet<>();
-        Set<OWLConcept> uniqueDPRestrictionDomains = new HashSet<>();
-        
-        Set<OWLConcept> uniqueOPEquivDomains = new HashSet<>();
-        Set<OWLConcept> uniqueDPEquivDomains = new HashSet<>();
-               
-        classes.forEach( (cls) -> {
-            Set<OWLObjectProperty> restrictionProps = OWLPropertyUtilities.getOPUsedInClassRestriction(cls, sourceOntology);
-            Set<OWLObjectProperty> equivProps = OWLPropertyUtilities.getOPUsedInClassEquivRestriction(cls, sourceOntology);
-            
-            Set<OWLDataProperty> restrictionDProps = OWLPropertyUtilities.getDPUsedInClassRestriction(cls, sourceOntology);
-            Set<OWLDataProperty> equivDProps = OWLPropertyUtilities.getDPUsedInClassEquivRestriction(cls, sourceOntology);
-            
-            if(!restrictionDProps.isEmpty()) {
-                allRestrictionDPs.addAll(restrictionDProps);
-                uniqueDPRestrictionDomains.add(cls);
-            }
-            
-            if(!equivDProps.isEmpty()) {
-                allEquivDPs.addAll(equivDProps);
-                uniqueDPEquivDomains.add(cls);
-            }
-            
-            if(!restrictionProps.isEmpty()) {
-                allRestrictionOPs.addAll(restrictionProps);
-                uniqueOPRestrictionDomains.add(cls);
-            }
-            
-            if (!equivProps.isEmpty()) {
-                allEquivOPs.addAll(equivProps);
-                uniqueOPEquivDomains.add(cls);
-            }
-        });
-
-        Set<OWLObjectProperty> oProperties = sourceOntology.getObjectPropertiesInSignature();
-        Set<OWLDataProperty> dProperties = sourceOntology.getDataPropertiesInSignature();
-        
-        int totalDomainOPs = 0;
-        int totalDomainDPs = 0;
-        
-        Set<OWLConcept> totalOPDomains = new HashSet<>();
-        Set<OWLConcept> totalDPDomains = new HashSet<>();
-        
-        for (OWLObjectProperty op : oProperties) {
-            Set<OWLConcept> oPDomain = OWLPropertyUtilities.getDomainForProperty(op, this);
-            
-            if(!oPDomain.isEmpty()) {
-                totalOPDomains.addAll(oPDomain);
-                totalDomainOPs++;
-            }
-        }
-        
-        for(OWLDataProperty dp : dProperties) {
-            Set<OWLConcept> dPDomain = OWLPropertyUtilities.getDomainForProperty(dp, this);//need to implement getDomainForDP
-            
-            if(!dPDomain.isEmpty()) {
-                totalDPDomains.addAll(dPDomain);
-                totalDomainDPs++;
-            }
-        }
-        
-        currentMetrics.totalOP = sourceOntology.getObjectPropertiesInSignature(true).size();
-        currentMetrics.totalDP = sourceOntology.getDataPropertiesInSignature(true).size();
-        
-        currentMetrics.totalOPRestrictionEquivCount = allEquivOPs.size();
-        currentMetrics.totalDPRestrictionEquivCount = allEquivDPs.size();
-        
-        currentMetrics.totalOPWithDomainCount = totalDomainOPs; 
-        currentMetrics.totalDPWithDomainCount = totalDomainDPs;
-        
-        currentMetrics.totalOPWithRestrictionCount = allRestrictionOPs.size();
-        currentMetrics.totalDPWithRestrictionCount = allRestrictionDPs.size();
-        
-        currentMetrics.totalUniqueOPExplicitDomains = totalOPDomains.size();
-        currentMetrics.totalUniqueDPExplicitDomains = totalDPDomains.size();
-        
-        currentMetrics.totalUniqueOPRestrictionDomains = uniqueOPRestrictionDomains.size();
-        currentMetrics.totalUniqueDPRestrictionDomains = uniqueDPRestrictionDomains.size();
-        currentMetrics.totalUniqueOPEquivDomains = uniqueOPEquivDomains.size();
-        currentMetrics.totalUniqueDPEquivDomains = uniqueDPEquivDomains.size();
-        
-        this.metrics = currentMetrics;
-    }
-
-    public OntologyMetrics getOntologyMetrics() {
-        return metrics;
     }
     
     public Map<OWLConcept, Set<OWLInheritableProperty>> getOntologyInferredProperties(Set<PropertyTypeAndUsage> propertyTypesAndUsages) {
