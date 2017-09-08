@@ -239,6 +239,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
                                 false),
                         
                         (ap) -> {
+                            frameState.setAggregateProperty(ap);
                             DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork().getAggregated(ap);
                             config.getUIConfiguration().getAbNDisplayManager().displayDisjointPAreaTaxonomy(disjointAbN);
                         },
@@ -282,6 +283,7 @@ public class OWLMultiAbNGraphFrameInitializers implements AbNGraphFrameInitializ
                                 frameManager,
                                 false),
                         (ap) -> {
+                            frameState.setAggregateProperty(ap);
                             DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork().getAggregated(ap);
                             config.getUIConfiguration().getAbNDisplayManager().displayDisjointTribalAbstractionNetwork(disjointAbN);
                         },
